@@ -1,4 +1,4 @@
-Rating
+Likes
 ======
 
 CraftBukkit Construction Rating Plugin

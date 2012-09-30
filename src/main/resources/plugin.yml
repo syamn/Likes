@@ -1,0 +1,18 @@
+##  Plugin Information  ##
+name: Likes
+version: version-number-unknown
+main: syam.likes.Likes
+description: Likes Plugin
+website: http://sakura-server.net/
+softdepend: [Vault]
+##  Original Author     ##
+author: syam
+commands:
+    book:
+      usage: /likes - to see the help
+      aliases: [like, l]
+      description: To see the Likes help.
+permissions:
+    rating.admin:
+        default: op
+        description: Allow access admin commands
