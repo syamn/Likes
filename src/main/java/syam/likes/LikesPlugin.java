@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import syam.likes.command.BaseCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.ReloadCommand;
+import syam.likes.listener.ServerListener;
 import syam.likes.permission.Perms;
 import syam.likes.util.Metrics;
 
@@ -37,7 +38,7 @@ public class LikesPlugin extends JavaPlugin{
 	public final static String msgPrefix = "&6[LikesPlugin] &f";
 
 	// ** Listener **
-	//ServerListener serverListener = new ServerListener(this);
+	ServerListener serverListener = new ServerListener(this);
 
 	// ** Commands **
 	private List<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -83,7 +84,7 @@ public class LikesPlugin extends JavaPlugin{
 		Perms.setupPermissionHandler();
 
 		// Regist Listeners
-		//pm.registerEvents(serverListener, this);
+		pm.registerEvents(serverListener, this);
 
 		// コマンド登録
 		registerCommands();
