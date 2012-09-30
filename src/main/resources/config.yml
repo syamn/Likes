@@ -1,0 +1,28 @@
+# Likes Configuration file!
+# @author syamn <admin@sakura-server.net>
+# github: https://github.com/syamn/Likes
+
+#==================#
+#   Vault Config   #
+#==================#
+# Hook to Vault for economy integration
+UseVault: false
+# Costs
+Cost:
+  Action: 100
+
+#========================#
+#   Permissions Config   #
+#========================#
+# Use Permissions List
+Permissions:
+- vault
+- pex
+- superperms
+- ops
+
+#==================#
+#   DO NOT TOUCH   #
+#==================#
+# Do not touch this option! It is a check if you are running the recent configuration version
+Version: 0.1
