@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes
+ * LikesPlugin - Package: syam.likes
  * Created: 2012/09/30 23:43:08
  */
 package syam.likes;
@@ -28,14 +28,14 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public class ConfigurationManager {
     // Logger
-	private static final Logger log = Likes.log;
-	private static final String logPrefix = Likes.logPrefix;
-	private static final String msgPrefix = Likes.msgPrefix;
+	private static final Logger log = LikesPlugin.log;
+	private static final String logPrefix = LikesPlugin.logPrefix;
+	private static final String msgPrefix = LikesPlugin.msgPrefix;
 
-	private Likes plugin;
+	private LikesPlugin plugin;
 	private FileConfiguration conf;
 
-	private static File pluginDir = new File("plugins", "Likes");
+	private static File pluginDir = new File("plugins", "LikesPlugin");
 
 	// デフォルトの設定定数
 	private final List<String> defaultPermissions = new ArrayList<String>() {{add("vault"); add("pex"); add("superperms"); add("ops");}};
@@ -54,7 +54,7 @@ public class ConfigurationManager {
 	 * コンストラクタ
 	 * @param plugin
 	 */
-	public ConfigurationManager(final Likes plugin){
+	public ConfigurationManager(final LikesPlugin plugin){
 		this.plugin = plugin;
 		pluginDir = this.plugin.getDataFolder();
 	}
@@ -224,7 +224,7 @@ public class ConfigurationManager {
 		DataInputStream dis = null;
 		try{
 			// jar内部のリソースファイルを取得
-			URL res = Likes.class.getResource(from);
+			URL res = LikesPlugin.class.getResource(from);
 			if (res == null){
 				log.warning(logPrefix+ "Can't find "+ from +" in plugin Jar file");
 				return;
@@ -295,6 +295,6 @@ public class ConfigurationManager {
 	}
 
 	public static File getJarFile(){
-		return new File("plugins", "Likes.jar");
+		return new File("plugins", "LikesPlugin.jar");
 	}
 }

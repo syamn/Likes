@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes.util
+ * LikesPlugin - Package: syam.likes.util
  * Created: 2012/09/30 23:46:19
  */
 package syam.likes.util;
@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import syam.likes.Likes;
+import syam.likes.LikesPlugin;
 
 /**
  * Actions (Actions.java)
@@ -32,13 +32,13 @@ import syam.likes.Likes;
  */
 public class Actions {
 	// Logger
-	private static final Logger log = Likes.log;
-	private static final String logPrefix = Likes.logPrefix;
-	private static final String msgPrefix = Likes.msgPrefix;
+	private static final Logger log = LikesPlugin.log;
+	private static final String logPrefix = LikesPlugin.logPrefix;
+	private static final String msgPrefix = LikesPlugin.msgPrefix;
 
-	private final Likes plugin;
+	private final LikesPlugin plugin;
 
-	public Actions(Likes plugin){
+	public Actions(LikesPlugin plugin){
 		this.plugin = plugin;
 	}
 
@@ -68,7 +68,7 @@ public class Actions {
 		if (message != null){
 			message = message
 					.replaceAll("&([0-9a-fk-or])", "\u00A7$1")
-					.replaceAll("%version", Likes.getInstance().getDescription().getVersion());
+					.replaceAll("%version", LikesPlugin.getInstance().getDescription().getVersion());
 			//debug(message);//debug
 			Bukkit.broadcastMessage(message);
 		}
@@ -82,7 +82,7 @@ public class Actions {
 		if (world != null && message != null){
 			message = message
 					.replaceAll("&([0-9a-fk-or])", "\u00A7$1")
-					.replaceAll("%version", Likes.getInstance().getDescription().getVersion());
+					.replaceAll("%version", LikesPlugin.getInstance().getDescription().getVersion());
 			for(Player player: world.getPlayers()){
 				player.sendMessage(message);
 			}
@@ -202,7 +202,7 @@ public class Actions {
 	 */
 	public static boolean addMoney(String name, double amount){
 		if (amount < 0) return false; // 負数は許容しない
-		EconomyResponse r = Likes.getInstance().getEconomy().depositPlayer(name, amount);
+		EconomyResponse r = LikesPlugin.getInstance().getEconomy().depositPlayer(name, amount);
 		if(r.transactionSuccess()) {
 			return true;
 		} else {
@@ -217,7 +217,7 @@ public class Actions {
 	 */
 	public static boolean takeMoney(String name, double amount){
 		if (amount < 0) return false; // 負数は許容しない
-		EconomyResponse r = Likes.getInstance().getEconomy().withdrawPlayer(name, amount);
+		EconomyResponse r = LikesPlugin.getInstance().getEconomy().withdrawPlayer(name, amount);
 		if(r.transactionSuccess()) {
 			return true;
 		} else {
@@ -231,7 +231,7 @@ public class Actions {
 	 * @return 持っていればtrue、無ければfalse
 	 */
 	public static boolean checkMoney(String name, double amount){
-		return (Likes.getInstance().getEconomy().has(name, amount));
+		return (LikesPlugin.getInstance().getEconomy().has(name, amount));
 	}
 	/**
 	 * 指定した金額での適切な通貨単位を返す
@@ -240,9 +240,9 @@ public class Actions {
 	 */
 	public static String getCurrencyName(double amount){
 	    if (amount <= 1.0D){
-	        return Likes.getInstance().getEconomy().currencyNameSingular();
+	        return LikesPlugin.getInstance().getEconomy().currencyNameSingular();
 	    }else{
-	        return Likes.getInstance().getEconomy().currencyNamePlural();
+	        return LikesPlugin.getInstance().getEconomy().currencyNamePlural();
 	    }
 	}
 	/**
@@ -251,7 +251,7 @@ public class Actions {
 	 * @return 文字列
 	 */
 	public static String getCurrencyString(double amount){
-	    return Likes.getInstance().getEconomy().format(amount);
+	    return LikesPlugin.getInstance().getEconomy().format(amount);
 	}
 
 	/****************************************/

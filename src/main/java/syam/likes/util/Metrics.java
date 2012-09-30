@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes.util
+ * LikesPlugin - Package: syam.likes.util
  * Created: 2012/09/30 23:44:26
  */
 package syam.likes.util;

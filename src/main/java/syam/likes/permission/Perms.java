@@ -1,12 +1,12 @@
 /**
- * Likes - Package: syam.likes.permission
+ * LikesPlugin - Package: syam.likes.permission
  * Created: 2012/10/01 0:23:08
  */
 package syam.likes.permission;
 
 import org.bukkit.permissions.Permissible;
 
-import syam.likes.Likes;
+import syam.likes.LikesPlugin;
 
 /**
  * Perms (Perms.java)
@@ -54,7 +54,7 @@ public enum Perms {
 	 */
 	public boolean has(final String playerName){
 		if (playerName == null) return false;
-		return has(Likes.getInstance().getServer().getPlayer(playerName));
+		return has(LikesPlugin.getInstance().getServer().getPlayer(playerName));
 	}
 
 	/* ***** Static ***** */

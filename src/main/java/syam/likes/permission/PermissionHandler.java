@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes.permission
+ * LikesPlugin - Package: syam.likes.permission
  * Created: 2012/10/01 0:23:18
  */
 package syam.likes.permission;
@@ -18,7 +18,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import ru.tehkode.permissions.PermissionUser;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
-import syam.likes.Likes;
+import syam.likes.LikesPlugin;
 
 /**
  * PermissionHandler (PermissionHandler.java)
@@ -39,14 +39,14 @@ public class PermissionHandler {
 	}
 
 	// Logger
-	private static final Logger log = Likes.log;
-	private static final String logPrefix = Likes.logPrefix;
-	private static final String msgPrefix = Likes.msgPrefix;
+	private static final Logger log = LikesPlugin.log;
+	private static final String logPrefix = LikesPlugin.logPrefix;
+	private static final String msgPrefix = LikesPlugin.msgPrefix;
 
 	// シングルトンインスタンス
 	private static PermissionHandler instance;
 
-	private final Likes plugin;
+	private final LikesPlugin plugin;
 	private PermType usePermType = null;
 
 	// 外部権限管理プラグイン
@@ -57,7 +57,7 @@ public class PermissionHandler {
 	 * コンストラクタ
 	 * @param plugin FlagGameプラグイン
 	 */
-	private PermissionHandler(final Likes plugin){
+	private PermissionHandler(final LikesPlugin plugin){
 		this.plugin = plugin;
 		instance = this;
 	}
@@ -314,7 +314,7 @@ public class PermissionHandler {
 		if (instance == null){
 			synchronized (PermissionHandler.class) {
 				if (instance == null){
-					instance = new PermissionHandler(Likes.getInstance());
+					instance = new PermissionHandler(LikesPlugin.getInstance());
 				}
 			}
 		}

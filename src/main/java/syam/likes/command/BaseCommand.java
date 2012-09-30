@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes.command
+ * LikesPlugin - Package: syam.likes.command
  * Created: 2012/09/30 23:45:35
  */
 package syam.likes.command;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import syam.likes.Likes;
+import syam.likes.LikesPlugin;
 import syam.likes.util.Actions;
 
 /**
@@ -20,9 +20,9 @@ import syam.likes.util.Actions;
  */
 public abstract class BaseCommand {
 	// Logger
-	protected static final Logger log = Likes.log;
-	protected static final String logPrefix = Likes.logPrefix;
-	protected static final String msgPrefix = Likes.msgPrefix;
+	protected static final Logger log = LikesPlugin.log;
+	protected static final String logPrefix = LikesPlugin.logPrefix;
+	protected static final String msgPrefix = LikesPlugin.msgPrefix;
 	/* コマンド関係 */
 	public CommandSender sender;
 	public List<String> args = new ArrayList<String>();
@@ -32,9 +32,9 @@ public abstract class BaseCommand {
 	public boolean bePlayer = true;
 	public Player player;
 	public String command;
-	public Likes plugin;
+	public LikesPlugin plugin;
 
-	public boolean run(Likes plugin, CommandSender sender, String[] preArgs, String cmd) {
+	public boolean run(LikesPlugin plugin, CommandSender sender, String[] preArgs, String cmd) {
 		this.plugin = plugin;
 		this.sender = sender;
 		this.command = cmd;

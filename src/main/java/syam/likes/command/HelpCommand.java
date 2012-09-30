@@ -1,10 +1,10 @@
 /**
- * Likes - Package: syam.likes.command
+ * LikesPlugin - Package: syam.likes.command
  * Created: 2012/09/30 23:52:53
  */
 package syam.likes.command;
 
-import syam.likes.Likes;
+import syam.likes.LikesPlugin;
 import syam.likes.util.Actions;
 
 /**

@@ -1,5 +1,5 @@
 /**
- * Likes - Package: syam.likes
+ * LikesPlugin - Package: syam.likes
  * Created: 2012/09/30 19:21:53
  */
 package syam.likes;
@@ -27,14 +27,14 @@ import syam.likes.permission.Perms;
 import syam.likes.util.Metrics;
 
 /**
- * Likes (Likes.java)
+ * LikesPlugin (LikesPlugin.java)
  * @author syam(syamn)
  */
-public class Likes extends JavaPlugin{
+public class LikesPlugin extends JavaPlugin{
 	// ** Logger **
 	public final static Logger log = Logger.getLogger("Minecraft");
-	public final static String logPrefix = "[Likes] ";
-	public final static String msgPrefix = "&6[Likes] &f";
+	public final static String logPrefix = "[LikesPlugin] ";
+	public final static String msgPrefix = "&6[LikesPlugin] &f";
 
 	// ** Listener **
 	//ServerListener serverListener = new ServerListener(this);
@@ -46,7 +46,7 @@ public class Likes extends JavaPlugin{
 	private ConfigurationManager config;
 
 	// ** Instance **
-	private static Likes instance;
+	private static LikesPlugin instance;
 
 	// ** Hookup Plugins **
 	private static Vault vault = null;
@@ -237,7 +237,7 @@ public class Likes extends JavaPlugin{
 	 * インスタンスを返す
 	 * @return Likesインスタンス
 	 */
-	public static Likes getInstance(){
+	public static LikesPlugin getInstance(){
 		return instance;
 	}
 }

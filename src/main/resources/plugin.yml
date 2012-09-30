@@ -1,10 +1,10 @@
 ##  Plugin Information  ##
 name: Likes
 version: version-number-unknown
-main: syam.likes.Likes
+main: syam.likes.LikesPlugin
 description: Likes Plugin
 website: http://sakura-server.net/
-softdepend: [Vault]
+softdepend: [Vault, PermissionsEx]
 ##  Original Author     ##
 author: syam
 commands:
