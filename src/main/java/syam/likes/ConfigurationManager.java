@@ -1,5 +1,5 @@
 /**
- * LikesPlugin - Package: syam.likes
+ * Likes - Package: syam.likes
  * Created: 2012/09/30 23:43:08
  */
 package syam.likes;
@@ -35,7 +35,7 @@ public class ConfigurationManager {
 	private LikesPlugin plugin;
 	private FileConfiguration conf;
 
-	private static File pluginDir = new File("plugins", "LikesPlugin");
+	private static File pluginDir = new File("plugins", "Likes");
 
 	// デフォルトの設定定数
 	private final List<String> defaultPermissions = new ArrayList<String>() {{add("vault"); add("pex"); add("superperms"); add("ops");}};
@@ -295,6 +295,6 @@ public class ConfigurationManager {
 	}
 
 	public static File getJarFile(){
-		return new File("plugins", "LikesPlugin.jar");
+		return new File("plugins", "Likes.jar");
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * LikesPlugin - Package: syam.likes.permission
+ * Likes - Package: syam.likes.permission
  * Created: 2012/10/01 0:23:08
  */
 package syam.likes.permission;
