@@ -24,6 +24,7 @@ import syam.likes.command.BaseCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.ReloadCommand;
 import syam.likes.listener.BlockListener;
+import syam.likes.listener.PlayerListener;
 import syam.likes.listener.ServerListener;
 import syam.likes.permission.Perms;
 import syam.likes.util.Metrics;
@@ -41,6 +42,7 @@ public class LikesPlugin extends JavaPlugin{
 	// ** Listener **
 	ServerListener serverListener = new ServerListener(this);
 	BlockListener blockListener = new BlockListener(this);
+	PlayerListener playerListener = new PlayerListener(this);
 
 	// ** Commands **
 	private List<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -88,6 +90,7 @@ public class LikesPlugin extends JavaPlugin{
 		// Regist Listeners
 		pm.registerEvents(serverListener, this);
 		pm.registerEvents(blockListener, this);
+		pm.registerEvents(playerListener, this);
 
 		// コマンド登録
 		registerCommands();
