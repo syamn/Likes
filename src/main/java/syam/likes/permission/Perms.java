@@ -23,6 +23,9 @@ public enum Perms {
 
 	// Setup Commands
 
+	// 特殊系
+	PLACESIGN ("user.placesign"),
+
 	;
 
 	// ノードヘッダー
