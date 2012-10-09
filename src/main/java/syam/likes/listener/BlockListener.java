@@ -73,6 +73,9 @@ public class BlockListener implements Listener {
 				}else{
 					event.setLine(0, "§a[Likes]");
 					event.setLine(2, "Likes Received:");
+					event.setLine(3, "0");
+
+					Actions.message(player, "&aLikes看板を設置しました！");
 				}
 			}
 		}
