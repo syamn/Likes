@@ -8,7 +8,7 @@ softdepend: [Vault, PermissionsEx]
 ##  Original Author     ##
 author: syam
 commands:
-    book:
+    likes:
       usage: /likes - to see the help
       aliases: [like, l]
       description: To see the Likes help.
