@@ -23,6 +23,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import syam.likes.command.BaseCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.ReloadCommand;
+import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
 import syam.likes.listener.PlayerListener;
 import syam.likes.listener.ServerListener;
@@ -49,6 +50,9 @@ public class LikesPlugin extends JavaPlugin{
 
 	// ** Private Classes **
 	private ConfigurationManager config;
+
+	// ** Static Variable **
+	private static Database database;
 
 	// ** Instance **
 	private static LikesPlugin instance;
@@ -94,6 +98,10 @@ public class LikesPlugin extends JavaPlugin{
 
 		// コマンド登録
 		registerCommands();
+
+		// データベース接続
+		database = new Database(this);
+		database.createStructure();
 
 		// マネージャ
 		//bm = new LikeManager(this);
@@ -230,6 +238,14 @@ public class LikesPlugin extends JavaPlugin{
 	 */
 	public Economy getEconomy(){
 		return economy;
+	}
+
+	/**
+	 * データベースを返す
+	 * @return Database
+	 */
+	public static Database getDatabases(){
+		return database;
 	}
 
 	/**
