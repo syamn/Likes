@@ -106,6 +106,8 @@ public class Database {
 				"`sign_id` int(10) unsigned NOT NULL AUTO_INCREMENT," +		// 割り当てる看板ID
 				"`sign_name` varchar(32) NOT NULL," +						// 看板の名前
 				"`player_id` int(10) unsigned NOT NULL," +					// 所有者のユーザID
+				"`status` int(2) NOT NULL DEFAULT '0'," +					// ステータス値
+				"`text` varchar(255) DEFAULT NULL," +						// メッセージ
 				"`liked` int(12) unsigned NOT NULL DEFAULT '0'," +			// Likeカウント
 				"`lastliked` int(32) unsigned NOT NULL DEFAULT '0'," +		// 最後にLikeされた日時
 				"`world` varchar(255) NOT NULL," +							// ワールド名
@@ -122,6 +124,7 @@ public class Database {
 				"`like_id` int(12) unsigned NOT NULL AUTO_INCREMENT," +		// 割り当てるLikeID
 				"`player_id` int(10) unsigned NOT NULL," +					// プレイヤーID
 				"`sign_id` int(10) unsigned NOT NULL," +					// 対象の看板ID
+				"`text` varchar(255) DEFAULT NULL," +						// メッセージ
 				"`timestamp` int(32) unsigned NOT NULL," +					// タイムスタンプ
 				"PRIMARY KEY (`like_id`)" +
 				") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
