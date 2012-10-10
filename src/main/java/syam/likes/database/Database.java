@@ -92,7 +92,7 @@ public class Database {
 				") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
 		// ユーザープロフィールテーブル
-		write("CREATE TABLE IF NOT EXISTS `" + tablePrefix + "profile` (" +
+		write("CREATE TABLE IF NOT EXISTS `" + tablePrefix + "profiles` (" +
 				"`player_id` int(10) unsigned NOT NULL," +					// 割り当てられたプレイヤーID
 				"`status` int(2) NOT NULL DEFAULT '0'," +					// ステータス値
 				"`like_give` int(12) unsigned NOT NULL DEFAULT '0'," +		// Likeした回数
