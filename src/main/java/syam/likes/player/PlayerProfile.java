@@ -22,9 +22,9 @@ import syam.likes.database.Database;
  */
 public class PlayerProfile {
 	// Logger
-	protected static final Logger log = LikesPlugin.log;
-	protected static final String logPrefix = LikesPlugin.logPrefix;
-	protected static final String msgPrefix = LikesPlugin.msgPrefix;
+	private static final Logger log = LikesPlugin.log;
+	private static final String logPrefix = LikesPlugin.logPrefix;
+	private static final String msgPrefix = LikesPlugin.msgPrefix;
 
 	private String playerName;
 	private boolean loaded = false;

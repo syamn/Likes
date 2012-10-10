@@ -15,8 +15,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import syam.likes.LikesPlugin;
+import syam.likes.manager.PlayerManager;
 import syam.likes.util.Actions;
 import syam.likes.util.Util;
 
@@ -65,5 +68,20 @@ public class PlayerListener implements Listener {
 				Actions.message(player, "&aあなたはこの建築物を評価しました！");
 			}
 		}
+	}
+
+	// プレイヤーがログインしようとした
+	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+	public void onPlayerLogin(final PlayerLoginEvent event){
+		// プレイヤー追加
+		PlayerManager.addPlayer(event.getPlayer());
+	}
+	
+	// プレイヤーがログアウトした
+	//@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	public void onPlayerQuit(final PlayerQuitEvent event){
+		Player player = event.getPlayer();
+
+		/* TODO: GC here */
 	}
 }

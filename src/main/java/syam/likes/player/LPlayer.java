@@ -16,9 +16,9 @@ import syam.likes.LikesPlugin;
  */
 public class LPlayer {
 	// Logger
-	protected static final Logger log = LikesPlugin.log;
-	protected static final String logPrefix = LikesPlugin.logPrefix;
-	protected static final String msgPrefix = LikesPlugin.msgPrefix;
+	private static final Logger log = LikesPlugin.log;
+	private static final String logPrefix = LikesPlugin.logPrefix;
+	private static final String msgPrefix = LikesPlugin.msgPrefix;
 
 	// プレイヤーデータ
 	private Player player;
