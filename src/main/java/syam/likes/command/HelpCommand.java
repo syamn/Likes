@@ -22,7 +22,7 @@ public class HelpCommand extends BaseCommand {
 	@Override
 	public void execute() {
 		Actions.message(sender, "&c===================================");
-		Actions.message(sender, "&bLikes Plugin version &3%version &bby syamn");
+		Actions.message(sender, "&bLikes Plugin version &3"+ plugin.getDescription().getVersion()+" &bby syamn");
 		Actions.message(sender, " &b<>&f = required, &b[]&f = optional");
 		// 全コマンドをループで表示
 		for (BaseCommand cmd : plugin.getCommands().toArray(new BaseCommand[0])){

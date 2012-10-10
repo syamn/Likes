@@ -32,6 +32,8 @@ public class ReloadCommand extends BaseCommand {
 		// 権限管理プラグイン再設定
 		Perms.setupPermissionHandler();
 
+		// TODO: データベース保存 新設定で接続試行
+
 		Actions.message(sender, "&aConfiguration reloaded!");
 	}
 
