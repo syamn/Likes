@@ -14,6 +14,7 @@ import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -21,12 +22,14 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import syam.likes.command.BaseCommand;
+import syam.likes.command.CreateCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.ReloadCommand;
 import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
 import syam.likes.listener.PlayerListener;
 import syam.likes.listener.ServerListener;
+import syam.likes.manager.PlayerManager;
 import syam.likes.permission.Perms;
 import syam.likes.util.Metrics;
 
@@ -106,6 +109,11 @@ public class LikesPlugin extends JavaPlugin{
 		// マネージャ
 		//bm = new LikeManager(this);
 
+		// プレイヤー追加
+		for (Player player : getServer().getOnlinePlayers()){
+			PlayerManager.addPlayer(player);
+		}
+
 		// メッセージ表示
 		PluginDescriptionFile pdfFile=this.getDescription();
 		log.info("["+pdfFile.getName()+"] version "+pdfFile.getVersion()+" is enabled!");
@@ -131,6 +139,7 @@ public class LikesPlugin extends JavaPlugin{
 		commands.add(new HelpCommand());
 
 		// General Commands
+		commands.add(new CreateCommand());
 
 		// Admin Commands
 		commands.add(new ReloadCommand());

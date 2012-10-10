@@ -110,6 +110,7 @@ public class Database {
 				"`text` varchar(255) DEFAULT NULL," +						// メッセージ
 				"`liked` int(12) unsigned NOT NULL DEFAULT '0'," +			// Likeカウント
 				"`lastliked` int(32) unsigned NOT NULL DEFAULT '0'," +		// 最後にLikeされた日時
+				"`created` int(32) unsigned NOT NULL DEFAULT '0'," +		// 最後にLikeされた日時
 				"`world` varchar(255) NOT NULL," +							// ワールド名
 				"`x` int(10) NOT NULL," +									// x
 				"`y` int(10) NOT NULL," +									// y

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
+import syam.likes.exception.CommandException;
 import syam.likes.util.Actions;
 
 /**
@@ -71,7 +72,16 @@ public abstract class BaseCommand {
 		}
 
 		// 実行
-		execute();
+		try {
+			execute();
+		}
+		catch (CommandException ex) {
+			Throwable error = ex;
+			while (error instanceof CommandException){
+				Actions.message(sender, error.getMessage());
+				error = error.getCause();
+			}
+		}
 
 		return true;
 	}
@@ -79,8 +89,9 @@ public abstract class BaseCommand {
 	/**
 	 * コマンドを実際に実行する
 	 * @return 成功すればtrue それ以外はfalse
+	 * @throws CommandException CommandException
 	 */
-	public abstract void execute();
+	public abstract void execute() throws CommandException;
 
 	/**
 	 * コマンド実行に必要な権限を持っているか検証する
