@@ -97,7 +97,7 @@ public class Database {
 				"`status` int(2) NOT NULL DEFAULT '0'," +					// ステータス値
 				"`like_give` int(12) unsigned NOT NULL DEFAULT '0'," +		// Likeした回数
 				"`like_receive` int(12) unsigned NOT NULL DEFAULT '0'," +	// Likeされた回数
-				"`lastlikegave` int(32) unsigned NOT NULL DEFAULT '0'," +	// 最後にLikeした日時
+				"`lastgivetime` int(32) unsigned NOT NULL DEFAULT '0'," +	// 最後にLikeした日時
 				"PRIMARY KEY (`player_id`)" +
 				") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
