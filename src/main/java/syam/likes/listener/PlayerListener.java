@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import syam.likes.LikesPlugin;
 import syam.likes.manager.PlayerManager;
+import syam.likes.manager.SetupManager;
 import syam.likes.util.Actions;
 import syam.likes.util.Util;
 
@@ -55,6 +56,10 @@ public class PlayerListener implements Listener {
 		if ((block.getState() instanceof Sign) && (event.getAction() == Action.RIGHT_CLICK_BLOCK)){
 			Sign sign = (Sign) block.getState();
 			if (sign.getLine(0).equals("§a[Likes]")){
+				SetupManager.setSelectedSign(player, sign);
+				Actions.message(player, msgPrefix+ "この看板を選択しました！");
+
+				if (true)return;//debug
 				// Like回数チェック
 				if (!Util.isInteger(sign.getLine(3))){
 					Actions.message(player, "&cこの看板は壊れています！");
@@ -76,7 +81,7 @@ public class PlayerListener implements Listener {
 		// プレイヤー追加
 		PlayerManager.addPlayer(event.getPlayer());
 	}
-	
+
 	// プレイヤーがログアウトした
 	//@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void onPlayerQuit(final PlayerQuitEvent event){

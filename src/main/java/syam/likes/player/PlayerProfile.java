@@ -73,7 +73,7 @@ public class PlayerProfile {
 		}
 
 		/* *** profilesテーブルデータ読み込み *************** */
-		HashMap<Integer, ArrayList<String>> profileDatas = database.read("SELECT `status`, `like_give`, `like_receive`, `lastgivetime` FROM " + tablePrefix + "profile WHERE player_id = " + playerID);
+		HashMap<Integer, ArrayList<String>> profileDatas = database.read("SELECT `status`, `like_give`, `like_receive`, `lastgivetime` FROM " + tablePrefix + "profiles WHERE player_id = " + playerID);
 		ArrayList<String> dataValues = profileDatas.get(1);
 
 		if (dataValues == null){
@@ -86,8 +86,9 @@ public class PlayerProfile {
 			this.like_give = Integer.valueOf(dataValues.get(1));
 			this.like_receive = Integer.valueOf(dataValues.get(2));
 			this.lastgivetime = Long.valueOf(dataValues.get(3));
+
+			dataValues.clear();
 		}
-		dataValues.clear();
 
 		// 読み込み正常終了
 		loaded = true;

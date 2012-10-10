@@ -8,7 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.Location;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
+
 import syam.likes.LikesPlugin;
+import syam.likes.database.Database;
+import syam.likes.exception.LikesPluginException;
+import syam.likes.player.PlayerProfile;
 import syam.likes.sign.LikeSign;
 
 /**
@@ -28,6 +35,8 @@ public class SignManager {
 
 	private static HashMap<Integer, LikeSign> signs = new HashMap<Integer, LikeSign>();
 
+	private static HashMap<Location, Integer> signIDs = new HashMap<Location, Integer>();
+
 	public static HashMap<Integer, LikeSign> getSigns(){
 		return signs;
 	}
@@ -41,5 +50,33 @@ public class SignManager {
 		return signs.get(signID);
 	}
 
+	/*********/
 
+	public static int createSign(final Sign sign, final Player creator, final String sign_name, final String description){
+		if (sign == null || sign.getBlock() == null || creator == null || sign_name == null){
+			return 0;
+		}
+
+		final Location loc = sign.getLocation();
+
+		PlayerProfile prof = new PlayerProfile(creator.getName(), false);
+		if (!prof.isLoaded() || prof.getPlayerID() == 0){
+			log.severe("This player records does not exist! creator="+creator.getName());
+			return 0;
+		}
+		final int playerID = prof.getPlayerID();
+
+		Database database = LikesPlugin.getDatabases();
+		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+		database.write("INSERT INTO " + tablePrefix + "signs " +
+				"(`player_id`, `sign_name`, `world`, `x`, `y`, `z`) VALUES " +
+				"(" + playerID + ", '" + sign_name + "', '" + loc.getWorld().getName() + "', " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")");
+		final int signID = database.getInt("SELECT `sign_id` FROM "+tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + sign_name + "'");
+		if (signID == 0){
+			throw new LikesPluginException("Could not insert to " + tablePrefix + "signs table properly!");
+		}
+
+		return signID;
+	}
 }

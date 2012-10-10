@@ -6,17 +6,19 @@ package syam.likes.command;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.bukkit.Location;
+import org.bukkit.block.Sign;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
 import syam.likes.exception.CommandException;
 import syam.likes.manager.PlayerManager;
+import syam.likes.manager.SetupManager;
+import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
-import syam.likes.player.LPlayer;
 import syam.likes.player.PlayerProfile;
-import syam.likes.util.Actions;
 import syam.likes.util.Util;
 
 /**
@@ -28,12 +30,18 @@ public class CreateCommand extends BaseCommand{
 		bePlayer = true;
 		name = "create";
 		argLength = 1;
-		usage = "<id> <- create your new sign";
+		usage = "<id> [description] <- create your new sign";
 	}
 
 	@Override
 	public void execute() throws CommandException {
-		String id = args.get(0).trim();
+		final Sign sign = SetupManager.getSelectedSign(player);
+		if (sign == null || sign.getBlock() == null){
+			throw new CommandException("&c先に設定対象の看板を右クリックで選択してください！");
+		}
+		final Location loc = sign.getLocation();
+
+		final String id = args.remove(0).trim();
 		if (!Pattern.compile("^[a-zA-Z0-9]{2,20}$").matcher(id).matches()){
 			throw new CommandException("&c建築物IDは半角英数字2～20文字で入力してください！");
 		}
@@ -44,14 +52,37 @@ public class CreateCommand extends BaseCommand{
 			throw new CommandException("&cあなたの情報が正しく読み込めていません");
 		}
 
-		int playerID = prof.getPlayerID();
+		final int playerID = prof.getPlayerID();
 
 		Database database = LikesPlugin.getDatabases();
-		String tablePrefix = plugin.getConfigs().getMySQLtablePrefix();
+		final String tablePrefix = plugin.getConfigs().getMySQLtablePrefix();
 
-		HashMap<Integer, ArrayList<String>> checkList = database.read("SELECT `sign_id` FROM " + tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = " + id);
+		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id` FROM " + tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + id + "'");
+		if (result.size() > 0){
+			throw new CommandException("&cあなたは既に同じ建築物IDの看板を設定しています！");
+		}
 
-		Actions.debug("checkList(keys): "+Util.join(checkList.keySet(), ", "));//debug
+		String description = null;
+		if (args.size() > 0){
+			description = Util.join(args, " ").trim();
+			if (description.length() > 100){
+				throw new CommandException("&c建築物説明の文章が長すぎます！");
+			}
+		}
+
+		result = database.read("SELECT `sign_id` FROM " + tablePrefix + "signs WHERE `world` = '" + loc.getWorld().getName() + "' AND `x` = " + loc.getBlockX() + " AND `y` = " + loc.getBlockY() + " AND `z` = " + loc.getBlockZ());
+		if (result.size() > 0){
+			throw new CommandException("&cこの看板は既に設定されています！");
+		}
+
+
+		// create
+		SignManager.createSign(sign, player, id, description);
+
+
+
+
+		//Actions.debug("checkList(keys): "+Util.join(checkList.keySet(), ", "));//debug
 
 		//ArrayList<String> dataValues = checkList.get(0);
 

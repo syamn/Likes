@@ -116,7 +116,6 @@ public class Database {
 				"`y` int(10) NOT NULL," +									// y
 				"`z` int(10) NOT NULL," +									// z
 				"PRIMARY KEY (`sign_id`)," +
-				"UNIQUE KEY `sign_name` (`sign_name`)," +
 				"KEY `x_y_z` (`x`,`y`,`z`)" +
 				") ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;");
 
@@ -281,6 +280,9 @@ public class Database {
 		log.warning("SQLException:" +ex.getMessage());
 		log.warning("SQLState:" +ex.getSQLState());
 		log.warning("ErrorCode:" +ex.getErrorCode());
+
+		log.warning("Stack Trace:");
+		ex.printStackTrace();
 	}
 }
 
