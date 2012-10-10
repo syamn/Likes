@@ -11,6 +11,19 @@ UseVault: false
 Cost:
   Action: 100
 
+#==================#
+#   MySQL Config   #
+#==================#
+MySQL:
+  Server:
+    Address: localhost
+    Port: 3306
+  Database:
+    Name: DatabaseName
+    User_Name: UserName
+    User_Password: UserPassword
+    TablePrefix: likes_
+
 #========================#
 #   Permissions Config   #
 #========================#

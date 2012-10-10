@@ -47,6 +47,13 @@ public class ConfigurationManager {
 	private boolean useVault = false;
 	// Costs
 	private double cost_action = 100D;
+	/* MySQL Configs */
+	private String mysqlAddress = "localhost";
+	private int mysqlPort = 3306;
+	private String mysqlDBName = "DatabaseName";
+	private String mysqlUserName = "UserName";
+	private String mysqlUserPass = "UserPassword";
+	private String mysqlTablePrefix = "likes_";
 	/* Permissions Configs */
 	private List<String> permissions = defaultPermissions;
 
@@ -90,6 +97,14 @@ public class ConfigurationManager {
 		    cost_action = plugin.getConfig().getDouble("Cost.Action", 100D);
 		}
 
+		/* MySQL Configs */
+		mysqlAddress = plugin.getConfig().getString("MySQL.Server.Address", "localhost");
+		mysqlPort = plugin.getConfig().getInt("MySQL.Server.Port", 3306);
+		mysqlDBName = plugin.getConfig().getString("MySQL.Database.Name", "DatabaseName");
+		mysqlUserName = plugin.getConfig().getString("MySQL.Database.User_Name", "Username");
+		mysqlUserPass = plugin.getConfig().getString("MySQL.Database.User_Password", "UserPassword");
+		mysqlTablePrefix = plugin.getConfig().getString("MySQL.Database.TablePrefix", "likes_");
+
 		/* Permissions Configs */
 		if (plugin.getConfig().get("Permissions") != null){
 			permissions = plugin.getConfig().getStringList("Permissions");
@@ -115,6 +130,25 @@ public class ConfigurationManager {
 	}
 	public double getCost_Action(){
 		return this.cost_action;
+	}
+	/* MySQL Configs */
+	public String getMySQLaddress(){
+		return this.mysqlAddress;
+	}
+	public int getMySQLport(){
+		return this.mysqlPort;
+	}
+	public String getMySQLdbname(){
+		return this.mysqlDBName;
+	}
+	public String getMySQLusername(){
+		return this.mysqlUserName;
+	}
+	public String getMySQLuserpass(){
+		return this.mysqlUserPass;
+	}
+	public String getMySQLtablePrefix(){
+		return this.mysqlTablePrefix;
 	}
 	/* Permissions Configs */
 	public List<String> getPermissions(){
