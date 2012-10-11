@@ -63,10 +63,10 @@ public class BlockListener implements Listener {
 					event.setLine(0, "§c[Likes]");
 				}else{
 					event.setLine(0, "§a[Likes]");
-					event.setLine(2, "§e== READY ==");
-					event.setLine(3, "§7Placed by");
-					if (player.getName().length() > 15) { event.setLine(4, player.getName().substring(0, 13) + ".."); }
-					else { event.setLine(4, player.getName()); }
+					event.setLine(1, "§e== READY ==");
+					event.setLine(2, "§7Placed by");
+					if (player.getName().length() > 15) { event.setLine(3, player.getName().substring(0, 13) + ".."); }
+					else { event.setLine(3, player.getName()); }
 
 					Actions.message(player, "&aLikes看板を設置しました！");
 				}
