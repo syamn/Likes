@@ -30,6 +30,7 @@ import syam.likes.listener.BlockListener;
 import syam.likes.listener.PlayerListener;
 import syam.likes.listener.ServerListener;
 import syam.likes.manager.PlayerManager;
+import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
 import syam.likes.util.Metrics;
 
@@ -107,7 +108,7 @@ public class LikesPlugin extends JavaPlugin{
 		database.createStructure();
 
 		// マネージャ
-		//bm = new LikeManager(this);
+		log.info(logPrefix + SignManager.loadSigns() + " like sign(s) loaded!"); // DB使用
 
 		// プレイヤー追加
 		for (Player player : getServer().getOnlinePlayers()){

@@ -4,6 +4,7 @@
  */
 package syam.likes.command;
 
+import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
 import syam.likes.util.Actions;
 
@@ -34,6 +35,7 @@ public class ReloadCommand extends BaseCommand {
 
 		// TODO: データベース保存 新設定で接続試行
 
+		Actions.message(sender, "&a" + SignManager.loadSigns() + " like sign(s) loaded!");
 		Actions.message(sender, "&aConfiguration reloaded!");
 	}
 

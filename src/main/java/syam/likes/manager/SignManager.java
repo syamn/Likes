@@ -4,11 +4,14 @@
  */
 package syam.likes.manager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
@@ -62,9 +65,19 @@ public class SignManager {
 	public static int getSignID(Location loc){
 		return signs.get(loc);
 	}
+	public static boolean isLikesSign(Location loc){
+		return signs.containsKey(loc);
+	}
 
 	/*********/
-
+	/**
+	 * 新規評価看板をDBに登録する
+	 * @param sign
+	 * @param creator
+	 * @param sign_name
+	 * @param description
+	 * @return
+	 */
 	public static boolean createSign(final Sign sign, final Player creator, final String sign_name, final String description){
 		if (sign == null || sign.getBlock() == null || creator == null || sign_name == null){
 			return false;
@@ -93,5 +106,36 @@ public class SignManager {
 		// Add
 		addSign(loc, signID);
 		return true;
+	}
+
+	/**
+	 * データベースから看板データをマッピングする
+	 */
+	public static int loadSigns(){
+		signs.clear();
+		World world = null;
+
+		Database database = LikesPlugin.getDatabases();
+		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id`, `world`, `x`, `y`, `z` FROM " + tablePrefix + "signs");
+		for (ArrayList<String> record : result.values()){
+			world = Bukkit.getWorld(record.get(1));
+			if (world == null){
+				log.warning(logPrefix+ "Skipping SignID " + record.get(0) + ":not exist world " + record.get(1));
+				continue;
+			}
+			signs.put(
+					new Location(
+							world,
+							Double.parseDouble(record.get(2)),
+							Double.parseDouble(record.get(3)),
+							Double.parseDouble(record.get(4))
+							),
+					Integer.parseInt(record.get(0))
+					);
+		}
+
+		return signs.size();
 	}
 }

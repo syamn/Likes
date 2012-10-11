@@ -58,19 +58,6 @@ public class PlayerListener implements Listener {
 			if (sign.getLine(0).equals("§a[Likes]")){
 				SetupManager.setSelectedSign(player, sign);
 				Actions.message(player, msgPrefix+ "この看板を選択しました！");
-
-				if (true)return;//debug
-				// Like回数チェック
-				if (!Util.isInteger(sign.getLine(3))){
-					Actions.message(player, "&cこの看板は壊れています！");
-					return;
-				}
-				int likes = Integer.parseInt(sign.getLine(3)) + 1;
-
-				sign.setLine(3, String.valueOf(likes));
-				sign.update();
-
-				Actions.message(player, "&aあなたはこの建築物を評価しました！");
 			}
 		}
 	}
