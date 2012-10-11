@@ -19,6 +19,7 @@ import syam.likes.manager.SetupManager;
 import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
 import syam.likes.player.PlayerProfile;
+import syam.likes.util.Actions;
 import syam.likes.util.Util;
 
 /**
@@ -42,8 +43,8 @@ public class CreateCommand extends BaseCommand{
 		final Location loc = sign.getLocation();
 
 		final String id = args.remove(0).trim();
-		if (!Pattern.compile("^[a-zA-Z0-9]{2,20}$").matcher(id).matches()){
-			throw new CommandException("&c建築物IDは半角英数字2～20文字で入力してください！");
+		if (!Pattern.compile("^[a-zA-Z0-9]{2,15}$").matcher(id).matches()){
+			throw new CommandException("&c建築物IDは半角英数字2～15文字で入力してください！");
 		}
 
 		PlayerProfile prof = PlayerManager.getProfile(player.getName());
@@ -75,17 +76,21 @@ public class CreateCommand extends BaseCommand{
 			throw new CommandException("&cこの看板は既に設定されています！");
 		}
 
-
 		// create
-		SignManager.createSign(sign, player, id, description);
+		boolean created = SignManager.createSign(sign, player, id, description);
+		if (!created){
+			throw new CommandException("&c新規評価看板の登録処理中にエラーが発生しました！");
+		}
 
+		// 看板更新
+		sign.setLine(1, "0");
+		sign.setLine(2, id);
+		if (player.getName().length() > 15)
+			sign.setLine(3, player.getName().substring(0, 13) + "..");
+		else
+			sign.setLine(3, player.getName());
 
-
-
-		//Actions.debug("checkList(keys): "+Util.join(checkList.keySet(), ", "));//debug
-
-		//ArrayList<String> dataValues = checkList.get(0);
-
+		Actions.message(player, "&a建築物名'"+id+"'で新規の評価看板を登録しました！");
 	}
 
 	@Override

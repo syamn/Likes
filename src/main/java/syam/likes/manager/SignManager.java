@@ -33,10 +33,8 @@ public class SignManager {
 		this.plugin = plugin;
 	}
 
+	/*
 	private static HashMap<Integer, LikeSign> signs = new HashMap<Integer, LikeSign>();
-
-	private static HashMap<Location, Integer> signIDs = new HashMap<Location, Integer>();
-
 	public static HashMap<Integer, LikeSign> getSigns(){
 		return signs;
 	}
@@ -49,20 +47,35 @@ public class SignManager {
 	public static LikeSign getSign(Integer signID){
 		return signs.get(signID);
 	}
+	*/
+
+	private static HashMap<Location, Integer> signs = new HashMap<Location, Integer>();
+	public static HashMap<Location, Integer> getSigns(){
+		return signs;
+	}
+	public static void addSign(Location loc, int signID){
+		signs.put(loc, signID);
+	}
+	public static void removeSign(Location loc){
+		signs.remove(loc);
+	}
+	public static int getSignID(Location loc){
+		return signs.get(loc);
+	}
 
 	/*********/
 
-	public static int createSign(final Sign sign, final Player creator, final String sign_name, final String description){
+	public static boolean createSign(final Sign sign, final Player creator, final String sign_name, final String description){
 		if (sign == null || sign.getBlock() == null || creator == null || sign_name == null){
-			return 0;
+			return false;
 		}
 
-		final Location loc = sign.getLocation();
+		final Location loc = sign.getBlock().getLocation();
 
 		PlayerProfile prof = new PlayerProfile(creator.getName(), false);
 		if (!prof.isLoaded() || prof.getPlayerID() == 0){
 			log.severe("This player records does not exist! creator="+creator.getName());
-			return 0;
+			return false;
 		}
 		final int playerID = prof.getPlayerID();
 
@@ -77,6 +90,8 @@ public class SignManager {
 			throw new LikesPluginException("Could not insert to " + tablePrefix + "signs table properly!");
 		}
 
-		return signID;
+		// Add
+		addSign(loc, signID);
+		return true;
 	}
 }
