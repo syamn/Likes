@@ -7,6 +7,7 @@ package syam.likes.listener;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -40,24 +41,28 @@ public class PlayerListener implements Listener {
 	}
 
 	// プレイヤーがクリックした
-	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onPlayerInteract(final PlayerInteractEvent event){
-		Player player = event.getPlayer();
-		Block block = null;
-
-		// ブロックをクリックしていなければ返す
-		if (event.hasBlock()){
-			block = event.getClickedBlock();
-		}else{
+		if (event.getAction() != Action.RIGHT_CLICK_BLOCK){
 			return;
 		}
 
+		final Block block = event.getClickedBlock();
+
+		// ブロックをクリックしていなければ返す
+		if (block == null){
+			return;
+		}
+
+		final int id = block.getTypeId();
 		// 看板チェック
-		if ((block.getState() instanceof Sign) && (event.getAction() == Action.RIGHT_CLICK_BLOCK)){
+		if (id == Material.SIGN_POST.getId() || id == Material.WALL_SIGN.getId()){
 			Sign sign = (Sign) block.getState();
 			if (sign.getLine(0).equals("§a[Likes]")){
+				Player player = event.getPlayer();
 				SetupManager.setSelectedSign(player, sign);
-				Actions.message(player, msgPrefix+ "この看板を選択しました！");
+				Actions.message(player, msgPrefix+ "&aこの看板を選択しました！");
+				event.setCancelled(true);
 			}
 		}
 	}

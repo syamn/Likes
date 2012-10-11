@@ -29,6 +29,7 @@ import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
 import syam.likes.listener.PlayerListener;
 import syam.likes.listener.ServerListener;
+import syam.likes.listener.SignProtectListener;
 import syam.likes.manager.PlayerManager;
 import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
@@ -48,6 +49,7 @@ public class LikesPlugin extends JavaPlugin{
 	ServerListener serverListener = new ServerListener(this);
 	BlockListener blockListener = new BlockListener(this);
 	PlayerListener playerListener = new PlayerListener(this);
+	SignProtectListener protectListener = new SignProtectListener(this);
 
 	// ** Commands **
 	private List<BaseCommand> commands = new ArrayList<BaseCommand>();
@@ -99,6 +101,7 @@ public class LikesPlugin extends JavaPlugin{
 		pm.registerEvents(serverListener, this);
 		pm.registerEvents(blockListener, this);
 		pm.registerEvents(playerListener, this);
+		pm.registerEvents(protectListener, this);
 
 		// コマンド登録
 		registerCommands();
