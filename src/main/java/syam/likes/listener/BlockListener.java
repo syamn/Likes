@@ -58,22 +58,15 @@ public class BlockListener implements Listener {
 				// 内容チェック
 				boolean err = false; // エラーフラグ
 
-				if (event.getLine(1).trim().length() < 3){
-					Actions.message(player, "&a2行目に建築物名を3文字以上で入力してください！");
-					err = true;
-				}
-				else if (!event.getLine(2).trim().equals("") || !event.getLine(3).trim().equals("") ){
-					Actions.message(player, "&c3、4行目は空白にしてください！");
-					err = true;
-				}
-
 				// 1行目の文字色
 				if (err){
 					event.setLine(0, "§c[Likes]");
 				}else{
 					event.setLine(0, "§a[Likes]");
-					event.setLine(2, "Likes Received:");
-					event.setLine(3, "0");
+					event.setLine(2, "§e== READY ==");
+					event.setLine(3, "§7Placed by");
+					if (player.getName().length() > 15) { event.setLine(4, player.getName().substring(0, 13) + ".."); }
+					else { event.setLine(4, player.getName()); }
 
 					Actions.message(player, "&aLikes看板を設置しました！");
 				}

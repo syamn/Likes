@@ -85,10 +85,9 @@ public class CreateCommand extends BaseCommand{
 		// 看板更新
 		sign.setLine(1, "0");
 		sign.setLine(2, id);
-		if (player.getName().length() > 15)
-			sign.setLine(3, player.getName().substring(0, 13) + "..");
-		else
-			sign.setLine(3, player.getName());
+		if (player.getName().length() > 15) { sign.setLine(3, player.getName().substring(0, 13) + ".."); }
+		else { sign.setLine(3, player.getName()); }
+		sign.update();
 
 		Actions.message(player, "&a建築物名'"+id+"'で新規の評価看板を登録しました！");
 	}

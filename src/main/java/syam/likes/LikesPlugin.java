@@ -40,8 +40,8 @@ import syam.likes.util.Metrics;
 public class LikesPlugin extends JavaPlugin{
 	// ** Logger **
 	public final static Logger log = Logger.getLogger("Minecraft");
-	public final static String logPrefix = "[LikesPlugin] ";
-	public final static String msgPrefix = "&6[LikesPlugin] &f";
+	public final static String logPrefix = "[Likes] ";
+	public final static String msgPrefix = "&6[Likes] &f";
 
 	// ** Listener **
 	ServerListener serverListener = new ServerListener(this);
