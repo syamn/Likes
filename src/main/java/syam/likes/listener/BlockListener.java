@@ -16,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 import syam.likes.LikesPlugin;
+import syam.likes.manager.SetupManager;
 import syam.likes.permission.Perms;
 import syam.likes.util.Actions;
 
@@ -68,7 +69,9 @@ public class BlockListener implements Listener {
 					if (player.getName().length() > 15) { event.setLine(3, player.getName().substring(0, 13) + ".."); }
 					else { event.setLine(3, player.getName()); }
 
-					Actions.message(player, "&aLikes看板を設置しました！");
+					SetupManager.setSelectedSign(player, (Sign) event.getBlock().getState());
+
+					Actions.message(player, "&aLikes看板を設置して選択しました！");
 				}
 			}
 		}

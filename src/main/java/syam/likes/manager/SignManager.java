@@ -37,34 +37,25 @@ public class SignManager {
 	}
 
 	/*
-	private static HashMap<Integer, LikeSign> signs = new HashMap<Integer, LikeSign>();
+	private static HashMap<Integer, LikeSign> signsSimply = new HashMap<Integer, LikeSign>();
 	public static HashMap<Integer, LikeSign> getSigns(){
-		return signs;
+		return signsSimply;
 	}
 	public static void addSign(Integer signID, LikeSign sign){
-		signs.put(signID, sign);
+		signsSimply.put(signID, sign);
 	}
 	public static void removeSign(Integer signID){
-		signs.remove(signID);
+		signsSimply.remove(signID);
 	}
 	public static LikeSign getSign(Integer signID){
-		return signs.get(signID);
+		return signsSimply.get(signID);
 	}
 	*/
 
-	private static HashMap<Location, Integer> signs = new HashMap<Location, Integer>();
-	public static HashMap<Location, Integer> getSigns(){
-		return signs;
-	}
-	public static void addSign(Location loc, int signID){
-		signs.put(loc, signID);
-	}
-	public static void removeSign(Location loc){
-		signs.remove(loc);
-	}
-	public static int getSignID(Location loc){
-		return signs.get(loc);
-	}
+	@Deprecated
+	private static HashMap<Location, Integer> signsSimply = new HashMap<Location, Integer>();
+	private static HashMap<Location, LikeSign> signs = new HashMap<Location, LikeSign>();
+
 	public static boolean isLikesSign(Location loc){
 		return signs.containsKey(loc);
 	}
@@ -84,27 +75,13 @@ public class SignManager {
 		}
 
 		final Location loc = sign.getBlock().getLocation();
+		final Long timestamp = System.currentTimeMillis() / 1000;
 
-		PlayerProfile prof = new PlayerProfile(creator.getName(), false);
-		if (!prof.isLoaded() || prof.getPlayerID() == 0){
-			log.severe("This player records does not exist! creator="+creator.getName());
-			return false;
-		}
-		final int playerID = prof.getPlayerID();
-
-		Database database = LikesPlugin.getDatabases();
-		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
-
-		database.write("INSERT INTO " + tablePrefix + "signs " +
-				"(`player_id`, `sign_name`, `world`, `x`, `y`, `z`) VALUES " +
-				"(" + playerID + ", '" + sign_name + "', '" + loc.getWorld().getName() + "', " + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")");
-		final int signID = database.getInt("SELECT `sign_id` FROM "+tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + sign_name + "'");
-		if (signID == 0){
-			throw new LikesPluginException("Could not insert to " + tablePrefix + "signs table properly!");
-		}
+		LikeSign ls = new LikeSign(0, sign_name, creator.getName(), 0, description, 0, 0, timestamp, loc);
+		ls.updateDB(true); // INSERT
 
 		// Add
-		addSign(loc, signID);
+		signs.put(loc, ls);
 		return true;
 	}
 
@@ -113,19 +90,68 @@ public class SignManager {
 	 */
 	public static int loadSigns(){
 		signs.clear();
+		World world;
+		Location loc;
+
+		Database database = LikesPlugin.getDatabases();
+		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+		HashMap<Integer, ArrayList<String>> result = database.read(
+				"SELECT `sign_id`, `sign_name`, `player_name`, `status`, `text`, `liked`, `lastliked`, `created`, `world`, `x`, `y`, `z` " +
+				"FROM " + tablePrefix + "signs NATURAL JOIN " + tablePrefix + "users");
+		for (ArrayList<String> record : result.values()){
+			int signID = Integer.parseInt(record.get(0));
+
+			world = Bukkit.getWorld(record.get(8));
+			if (world == null){
+				log.warning(logPrefix+ "Skipping SignID " + record.get(0) + ":not exist world " + record.get(1));
+				continue;
+			}
+
+			loc = new Location(
+					world,
+					Double.parseDouble(record.get(9)),
+					Double.parseDouble(record.get(10)),
+					Double.parseDouble(record.get(11))
+					);
+
+			LikeSign ls = new LikeSign(
+					signID,
+					record.get(1),
+					record.get(2),
+					Integer.parseInt(record.get(3)),
+					record.get(4),
+					Integer.parseInt(record.get(5)),
+					Long.parseLong(record.get(6)),
+					Long.parseLong(record.get(7)),
+					loc
+					);
+
+			// Add HashMap
+			signs.put(loc, ls);
+		}
+		return signs.size();
+	}
+
+	/**
+	 * データベースから看板データをマッピングする
+	 */
+	@Deprecated
+	public static int loadSignsSimply(){
+		signsSimply.clear();
 		World world = null;
 
 		Database database = LikesPlugin.getDatabases();
 		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
 
-		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id`, `world`, `x`, `y`, `z` FROM " + tablePrefix + "signs");
+		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id`, `world`, `x`, `y`, `z` FROM " + tablePrefix + "signsSimply");
 		for (ArrayList<String> record : result.values()){
 			world = Bukkit.getWorld(record.get(1));
 			if (world == null){
 				log.warning(logPrefix+ "Skipping SignID " + record.get(0) + ":not exist world " + record.get(1));
 				continue;
 			}
-			signs.put(
+			signsSimply.put(
 					new Location(
 							world,
 							Double.parseDouble(record.get(2)),
@@ -136,6 +162,6 @@ public class SignManager {
 					);
 		}
 
-		return signs.size();
+		return signsSimply.size();
 	}
 }

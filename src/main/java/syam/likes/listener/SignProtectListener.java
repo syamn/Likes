@@ -95,7 +95,6 @@ public class SignProtectListener implements Listener{
 				Block attackedBlock = block.getRelative(sign.getAttachedFace());
 				if (attackedBlock.getType() == Material.AIR){
 					event.setCancelled(true);
-
 				}
 			}
 		}

@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import syam.likes.command.BaseCommand;
 import syam.likes.command.CreateCommand;
 import syam.likes.command.HelpCommand;
+import syam.likes.command.LikeCommand;
 import syam.likes.command.ReloadCommand;
 import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
@@ -144,6 +145,7 @@ public class LikesPlugin extends JavaPlugin{
 
 		// General Commands
 		commands.add(new CreateCommand());
+		commands.add(new LikeCommand());
 
 		// Admin Commands
 		commands.add(new ReloadCommand());
