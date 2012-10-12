@@ -241,6 +241,9 @@ public class Database {
 	}
 
 
+	public String getTablePrefix(){
+		return plugin.getConfigs().getMySQLtablePrefix();
+	}
 
 	/**
 	 * 接続状況を返す

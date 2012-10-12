@@ -56,10 +56,9 @@ public class CreateCommand extends BaseCommand{
 		final int playerID = prof.getPlayerID();
 
 		// Get database
-		Database database = LikesPlugin.getDatabases();
-		final String tablePrefix = plugin.getConfigs().getMySQLtablePrefix();
+		Database db = LikesPlugin.getDatabases();
 
-		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id` FROM " + tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + id + "'");
+		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + id + "'");
 		if (result.size() > 0){
 			throw new CommandException("&cあなたは既に同じ建築物IDの看板を設定しています！");
 		}
@@ -74,7 +73,7 @@ public class CreateCommand extends BaseCommand{
 		}
 
 		// Check already
-		result = database.read("SELECT `sign_id` FROM " + tablePrefix + "signs WHERE `world` = '" + loc.getWorld().getName() + "' AND `x` = " + loc.getBlockX() + " AND `y` = " + loc.getBlockY() + " AND `z` = " + loc.getBlockZ());
+		result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `world` = '" + loc.getWorld().getName() + "' AND `x` = " + loc.getBlockX() + " AND `y` = " + loc.getBlockY() + " AND `z` = " + loc.getBlockZ());
 		if (result.size() > 0){
 			throw new CommandException("&cこの看板は既に設定されています！");
 		}

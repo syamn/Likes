@@ -4,7 +4,9 @@
  */
 package syam.likes.command;
 
+import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
@@ -74,6 +76,14 @@ public class LikeCommand extends BaseCommand{
 			String msg = "&aこの建築物をお気に入りに追加しました！";
 			if (paid) msg = msg + " &c(-" + Actions.getCurrencyString(cost) + ")";
 			Actions.message(player, msg);
+
+			Player creator = Bukkit.getPlayer(ls.getCreator());
+			if (creator != null && creator.isOnline()){
+				Actions.message(sender, "&aプレイヤー'&6"+player.getName()+"&a'があなたの建築物'&6"+ls.getName()+"&a'をお気に入りに登録しました！");
+				if (comment != null && comment.length() > 0){
+					Actions.message(sender, "&aコメント: &6");
+				}
+			}
 		}
 		// error
 		else{

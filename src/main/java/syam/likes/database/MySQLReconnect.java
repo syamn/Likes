@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.manager.PlayerManager;
+import syam.likes.manager.SignManager;
 
 /**
  * MySQLReconnect (MySQLReconnect.java)
@@ -32,7 +33,9 @@ public class MySQLReconnect implements Runnable{
 					PlayerManager.addPlayer(player);
 				}
 
-				//TODO: その他データベース使用のデータ保存
+				// DB使用データ保存
+				PlayerManager.saveAll();
+				SignManager.saveAll();
 			}
 		}
 	}

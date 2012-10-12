@@ -81,11 +81,10 @@ public class LikeSign {
 			String signIDstr = (addNew) ? "null" : String.valueOf(this.signID);
 
 			// Get DataBase
-			Database database = LikesPlugin.getDatabases();
-			final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+			Database db = LikesPlugin.getDatabases();
 
 			// UPDATE
-			database.write("REPLACE INTO " + tablePrefix + "signs VALUES " +
+			db.write("REPLACE INTO " + db.getTablePrefix() + "signs VALUES " +
 					"(" +
 					signIDstr + ", " +
 					"'" + this.sign_name + "', " +
@@ -103,9 +102,9 @@ public class LikeSign {
 
 			// Get new signID
 			if (addNew){
-				this.signID = database.getInt("SELECT `sign_id` FROM "+tablePrefix + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + this.sign_name + "'");
+				this.signID = db.getInt("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + this.sign_name + "'");
 				if (signID == 0){
-					throw new LikesPluginException("Could not insert to " + tablePrefix + "signs table properly!");
+					throw new LikesPluginException("Could not insert to " + db.getTablePrefix() + "signs table properly!");
 				}
 			}
 			dirty = false;
@@ -156,10 +155,9 @@ public class LikeSign {
 		final int timestamp = Util.getCurrentUnixSec().intValue();
 
 		// Like!
-		Database database = LikesPlugin.getDatabases();
-		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+		Database db = LikesPlugin.getDatabases();
 
-		boolean result = database.write("INSERT INTO " + tablePrefix + "likes VALUES " +
+		boolean result = db.write("INSERT INTO " + db.getTablePrefix() + "likes VALUES " +
 					"(null, " + playerID + ", " + this.signID + ", '" + text + "', " + timestamp + ")");
 
 		if (result){
@@ -205,11 +203,10 @@ public class LikeSign {
 		final int playerID = prof.getPlayerID();
 
 		// Get DataBase
-		Database database = LikesPlugin.getDatabases();
-		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+		Database db = LikesPlugin.getDatabases();
 
 		// Get Result
-		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `like_id` FROM " + tablePrefix + "likes WHERE `player_id` = " + playerID + " AND `sign_id` = " + this.signID);
+		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `like_id` FROM " + db.getTablePrefix() + "likes WHERE `player_id` = " + playerID + " AND `sign_id` = " + this.signID);
 		if (result.size() > 0){
 			return true;
 		}else{
@@ -227,6 +224,10 @@ public class LikeSign {
 	public String getUniqueID(){
 		return creator + "." + this.sign_name;
 	}
+	public String getCreator(){
+		return this.creator;
+	}
+
 
 	public String getName(){
 		return this.sign_name;
