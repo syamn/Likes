@@ -84,13 +84,13 @@ public class LikeSign {
 			Database db = LikesPlugin.getDatabases();
 
 			// UPDATE
-			db.write("REPLACE INTO " + db.getTablePrefix() + "signs VALUES " +
+			/*db.write("REPLACE INTO " + db.getTablePrefix() + "signs VALUES " +
 					"(" +
 					signIDstr + ", " +
 					"'" + this.sign_name + "', " +
 					playerID + ", " +
 					this.status + ", " +
-					"'" + this.text + "', " +
+					"?, " +
 					this.liked + ", " +
 					this.lastliked.intValue() + ", " +
 					this.created.intValue() + ", " +
@@ -99,6 +99,11 @@ public class LikeSign {
 					loc.getBlockY() + ", " +
 					loc.getBlockZ() +
 					")");
+			*/
+			db.write("REPLACE INTO " + db.getTablePrefix() + "signs VALUES " +
+					"(" + signIDstr + ", ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+					, this.sign_name, playerID, this.status, this.text, this.liked, this.lastliked.intValue(), this.created.intValue()
+					, this.loc.getWorld().getName(), this.loc.getBlockX(), this.loc.getBlockY(), this.loc.getBlockZ());
 
 			// Get new signID
 			if (addNew){

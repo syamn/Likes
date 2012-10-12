@@ -51,6 +51,11 @@ public class LikeCommand extends BaseCommand{
 			}
 		}
 
+		// Check creator
+		if (ls.getCreator().equals(player.getName())){
+			throw new CommandException("&cそれは自分が設置した看板です！");
+		}
+
 		// Check time
 		if (!PlayerManager.getPlayer(player.getName()).canDoLikeTime()){
 			throw new CommandException("&c6時間に1回だけお気に入りに登録することができます！");

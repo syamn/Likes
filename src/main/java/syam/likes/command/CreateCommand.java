@@ -43,8 +43,8 @@ public class CreateCommand extends BaseCommand{
 		final Location loc = sign.getLocation();
 
 		// Check sign name
-		final String id = args.remove(0).trim();
-		if (!Pattern.compile("^[a-zA-Z0-9]{2,15}$").matcher(id).matches()){
+		final String signName = args.remove(0).trim();
+		if (!Pattern.compile("^[a-zA-Z0-9]{2,15}$").matcher(signName).matches()){
 			throw new CommandException("&c建築物IDは半角英数字2～15文字で入力してください！");
 		}
 
@@ -57,8 +57,7 @@ public class CreateCommand extends BaseCommand{
 
 		// Get database
 		Database db = LikesPlugin.getDatabases();
-
-		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + id + "'");
+		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + signName + "'");
 		if (result.size() > 0){
 			throw new CommandException("&cあなたは既に同じ建築物IDの看板を設定しています！");
 		}
@@ -73,8 +72,7 @@ public class CreateCommand extends BaseCommand{
 		}
 
 		// Check already
-		result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `world` = '" + loc.getWorld().getName() + "' AND `x` = " + loc.getBlockX() + " AND `y` = " + loc.getBlockY() + " AND `z` = " + loc.getBlockZ());
-		if (result.size() > 0){
+		if (SignManager.isLikesSign(loc)){
 			throw new CommandException("&cこの看板は既に設定されています！");
 		}
 
@@ -89,19 +87,19 @@ public class CreateCommand extends BaseCommand{
 		}
 
 		// create!
-		boolean created = SignManager.createSign(sign, player, id, description);
+		boolean created = SignManager.createSign(sign, player, signName, description);
 		if (!created){
 			throw new CommandException("&c新規看板の登録処理中にエラーが発生しました！");
 		}
 
 		// 看板更新
 		sign.setLine(1, "0");
-		sign.setLine(2, id);
+		sign.setLine(2, signName);
 		if (player.getName().length() > 15) { sign.setLine(3, player.getName().substring(0, 13) + ".."); }
 		else { sign.setLine(3, player.getName()); }
 		sign.update();
 
-		String msg = "&a建築物名'"+id+"'で新規の看板を登録しました！";
+		String msg = "&a建築物名'"+signName+"'で新規の看板を登録しました！";
 		if (paid) msg = msg + " &c(-" + Actions.getCurrencyString(cost) + ")";
 		Actions.message(player, msg);
 	}
