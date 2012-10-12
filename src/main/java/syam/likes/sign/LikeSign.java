@@ -18,6 +18,7 @@ import syam.likes.database.Database;
 import syam.likes.exception.CommandException;
 import syam.likes.exception.LikesPluginException;
 import syam.likes.manager.PlayerManager;
+import syam.likes.manager.SignManager;
 import syam.likes.player.LPlayer;
 import syam.likes.player.PlayerProfile;
 import syam.likes.util.Actions;
@@ -122,7 +123,7 @@ public class LikeSign {
 	public List<String> getInformation(){
 		List<String> ret = new ArrayList<String>();
 
-		ret.add("&b建築物ID:&6 " + getUniqueID() + " &b建築者:&6 " + creator);
+		ret.add("&b建築物ID:&6 " + getUniqueName() + " &b建築者:&6 " + creator);
 		ret.add("&b設置日:&6 " + Util.getDispTimeByUnixTime(this.created));
 		ret.add("&b建築物紹介:&6 " + ((this.text == null || this.text.length() == 0) ? "&7(なし)" : this.text));
 		ret.add("&bお気に入り登録ユーザー数:&6 " + this.liked);
@@ -221,6 +222,37 @@ public class LikeSign {
 		}
 	}
 
+
+	public boolean deleteSign(){
+		// Get Creator ID
+		PlayerProfile prof = new PlayerProfile(creator, false);
+		if (!prof.isLoaded() || prof.getPlayerID() == 0){
+			throw new LikesPluginException("This player records does not exist! creator="+creator);
+		}
+		final int playerID = prof.getPlayerID();
+
+		// Get DataBase
+		Database db = LikesPlugin.getDatabases();
+
+		// DELETE
+		db.write("DELETE FROM " + db.getTablePrefix() + "signs WHERE `sign_id` = ?", this.signID); // signs table
+		db.write("DELETE FROM " + db.getTablePrefix() + "likes WHERE `sign_id` = ?", this.signID); // likes table
+		SignManager.removLikeSign(this.loc);
+
+		// Update sign
+		Sign sign = Actions.getSign(this.loc);
+		if (sign != null){
+			sign.setLine(0, "§c[Likes]");
+			sign.setLine(1, "This sign has");
+			sign.setLine(2, "been §4removed");
+			sign.setLine(3, "by §4Creator§0!");
+
+			sign.update();
+		}
+
+		return true;
+	}
+
 	/* getter/setter */
 	public int getSignID(){
 		return this.signID;
@@ -228,7 +260,7 @@ public class LikeSign {
 	public Location getLocation(){
 		return this.loc;
 	}
-	public String getUniqueID(){
+	public String getUniqueName(){
 		return creator + "." + this.sign_name;
 	}
 	public String getCreator(){

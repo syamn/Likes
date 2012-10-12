@@ -19,6 +19,7 @@ public enum Perms {
 	// User Commands
 	LIKE ("user.like"),
 	CREATE ("user.create"),
+	DELETE ("user.delete"),
 
 	// Admin Commands
 	RELOAD	("admin.reload"),

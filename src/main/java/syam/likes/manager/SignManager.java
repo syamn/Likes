@@ -70,6 +70,9 @@ public class SignManager {
 	public static LikeSign getLikeSign(Location loc){
 		return signs.get(loc);
 	}
+	public static void removLikeSign(Location loc){
+		signs.remove(loc);
+	}
 
 	public static int saveAll(){
 		int i = 0;

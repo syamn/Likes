@@ -22,10 +22,13 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import syam.likes.command.BaseCommand;
+import syam.likes.command.ConfirmCommand;
 import syam.likes.command.CreateCommand;
+import syam.likes.command.DeleteCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.LikeCommand;
 import syam.likes.command.ReloadCommand;
+import syam.likes.command.queue.ConfirmQueue;
 import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
 import syam.likes.listener.PlayerListener;
@@ -57,6 +60,7 @@ public class LikesPlugin extends JavaPlugin{
 
 	// ** Private Classes **
 	private ConfigurationManager config;
+	private ConfirmQueue queue;
 
 	// ** Static Variable **
 	private static Database database;
@@ -106,6 +110,7 @@ public class LikesPlugin extends JavaPlugin{
 
 		// コマンド登録
 		registerCommands();
+		queue = new ConfirmQueue(this);
 
 		// データベース接続
 		database = new Database(this);
@@ -148,10 +153,12 @@ public class LikesPlugin extends JavaPlugin{
 	private void registerCommands(){
 		// Intro Commands
 		commands.add(new HelpCommand());
+		commands.add(new ConfirmCommand());
 
 		// General Commands
-		commands.add(new CreateCommand());
 		commands.add(new LikeCommand());
+		commands.add(new CreateCommand());
+		commands.add(new DeleteCommand());
 
 		// Admin Commands
 		commands.add(new ReloadCommand());
@@ -243,6 +250,14 @@ public class LikesPlugin extends JavaPlugin{
 	 */
 	public List<BaseCommand> getCommands(){
 		return commands;
+	}
+
+	/**
+	 * Confirmコマンドキューを返す
+	 * @return ConfirmQueue
+	 */
+	public ConfirmQueue getQueue(){
+		return queue;
 	}
 
 	/**
