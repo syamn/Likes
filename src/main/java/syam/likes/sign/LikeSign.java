@@ -107,7 +107,7 @@ public class LikeSign {
 
 			// Get new signID
 			if (addNew){
-				this.signID = db.getInt("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + this.sign_name + "'");
+				this.signID = db.getInt("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = ?", this.sign_name);
 				if (signID == 0){
 					throw new LikesPluginException("Could not insert to " + db.getTablePrefix() + "signs table properly!");
 				}
@@ -145,7 +145,7 @@ public class LikeSign {
 		sign.update();
 	}
 
-	public boolean addLike(final Player player, String text){
+	public boolean addLike(final Player player, String comment){
 		if (player == null) throw new IllegalArgumentException("Player could not be null!");
 		if (this.signID <= 0) {
 			this.save(true);
@@ -162,8 +162,10 @@ public class LikeSign {
 		// Like!
 		Database db = LikesPlugin.getDatabases();
 
-		boolean result = db.write("INSERT INTO " + db.getTablePrefix() + "likes VALUES " +
-					"(null, " + playerID + ", " + this.signID + ", '" + text + "', " + timestamp + ")");
+		//boolean result = db.write("INSERT INTO " + db.getTablePrefix() + "likes VALUES (null, " + playerID + ", " + this.signID + ", '" + text + "', " + timestamp + ")");
+		boolean result = db.write("INSERT INTO " + db.getTablePrefix() + "likes " +
+				"(`player_id`, `sign_id`, `text`, `timestamp`) VALUES (?, ?, ?, ?)",
+				playerID, this.signID, comment, timestamp);
 
 		if (result){
 			// プロフィール更新
@@ -211,7 +213,7 @@ public class LikeSign {
 		Database db = LikesPlugin.getDatabases();
 
 		// Get Result
-		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `like_id` FROM " + db.getTablePrefix() + "likes WHERE `player_id` = " + playerID + " AND `sign_id` = " + this.signID);
+		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `like_id` FROM " + db.getTablePrefix() + "likes WHERE `player_id` = ? AND `sign_id` = ?", playerID, this.signID);
 		if (result.size() > 0){
 			return true;
 		}else{

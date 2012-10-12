@@ -287,6 +287,9 @@ public class Database {
 	 * @return 最初のローにある数値
 	 */
 	public int getInt(String sql){
+		return getInt(sql, new Object[0]);
+	}
+	public int getInt(String sql, Object... obj){
 		ResultSet resultSet = null;
 		int result = 0;
 
@@ -295,6 +298,12 @@ public class Database {
 			PreparedStatement statement = null;
 			try{
 				statement = connection.prepareStatement(sql);
+				// バインド
+				if (obj != null && obj.length > 0){
+					for (int i = 0; i < obj.length; i++){
+						statement.setObject(i + 1, obj[i]);
+					}
+				}
 				resultSet = statement.executeQuery(); // 実行
 
 				if (resultSet.next()){

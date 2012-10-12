@@ -31,7 +31,7 @@ public class PlayerProfile {
 	private boolean dirty;
 
 	/* Data */
-	private byte status;
+	private Byte status;
 	private Long lastgivetime = 0L;
 
 	private int like_give;
@@ -59,7 +59,7 @@ public class PlayerProfile {
 		Database db = LikesPlugin.getDatabases();
 
 		// プレイヤーID(DB割り当て)を読み出す
-		playerID = db.getInt("SELECT player_id FROM " + db.getTablePrefix() + "users WHERE player_name = '" + playerName + "'");
+		playerID = db.getInt("SELECT player_id FROM " + db.getTablePrefix() + "users WHERE player_name = ?", playerName);
 
 		// プレイヤー基本テーブルにデータがなければ何もしない
 		if (playerID == 0){
@@ -68,13 +68,13 @@ public class PlayerProfile {
 
 		/* *** profilesテーブルデータ読み込み *************** */
 		HashMap<Integer, ArrayList<String>> profileDatas = db.read(
-				"SELECT `status`, `like_give`, `like_receive`, `lastgivetime` FROM " + db.getTablePrefix() + "profiles WHERE player_id = " + playerID);
+				"SELECT `status`, `like_give`, `like_receive`, `lastgivetime` FROM " + db.getTablePrefix() + "profiles WHERE player_id = ?", playerID);
 		ArrayList<String> dataValues = profileDatas.get(1);
 
 		if (dataValues == null){
 			// 新規レコード追加
 			log.warning(playerName + " does not exist in the profile table. Their profile will be reset.");
-			db.write("INSERT INTO " + db.getTablePrefix() + "profile (player_id) VALUES (" + playerID + ")");
+			db.write("INSERT INTO " + db.getTablePrefix() + "profile (player_id) VALUES (?)", playerID);
 		}else{
 			// データ読み出し
 			this.status = Byte.valueOf(dataValues.get(0));
@@ -97,9 +97,9 @@ public class PlayerProfile {
 	private void addMySQLPlayer(){
 		Database db = LikesPlugin.getDatabases();
 
-		db.write("INSERT INTO " + db.getTablePrefix() + "users (player_name) VALUES ('" + playerName + "')"); // usersテーブル
-		playerID = db.getInt("SELECT player_id FROM "+db.getTablePrefix() + "users WHERE player_name = '" + playerName + "'");
-		db.write("INSERT INTO " + db.getTablePrefix() + "profiles (player_id) VALUES (" + playerID + ")"); // profilesテーブル
+		db.write("INSERT INTO " + db.getTablePrefix() + "users (player_name) VALUES (?)", playerName); // usersテーブル
+		playerID = db.getInt("SELECT player_id FROM "+db.getTablePrefix() + "users WHERE player_name = ?", playerName);
+		db.write("INSERT INTO " + db.getTablePrefix() + "profiles (player_id) VALUES (?)", playerID); // profilesテーブル
 	}
 
 	/**
@@ -112,12 +112,21 @@ public class PlayerProfile {
 			// データベースupdate
 
 			/* profilesテーブル */
-			db.write("UPDATE " + db.getTablePrefix() + "profiles SET " +
+			/*db.write("UPDATE " + db.getTablePrefix() + "profiles SET " +
 					"`status` = " + this.status +
 					", `like_give` = " + this.like_give +
 					", `like_receive` = " + this.like_receive +
 					", `lastgivetime` = " + this.lastgivetime.intValue() +
 					" WHERE player_id = " + playerID);
+			*/
+			db.write("UPDATE " + db.getTablePrefix() + "profiles SET " +
+					"`status` = ?" +
+					", `like_give` = ?" +
+					", `like_receive` = ?" +
+					", `lastgivetime` = ?" +
+					" WHERE player_id = ?",
+					this.status.intValue(), this.like_give, this.like_receive, this.lastgivetime.intValue(),
+					this.playerID);
 			dirty = false;
 		}
 	}

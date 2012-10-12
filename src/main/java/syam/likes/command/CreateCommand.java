@@ -57,7 +57,7 @@ public class CreateCommand extends BaseCommand{
 
 		// Get database
 		Database db = LikesPlugin.getDatabases();
-		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = " + playerID + " AND `sign_name` = '" + signName + "'");
+		HashMap<Integer, ArrayList<String>> result = db.read("SELECT `sign_id` FROM " + db.getTablePrefix() + "signs WHERE `player_id` = ? AND `sign_name` = ?", playerID, signName);
 		if (result.size() > 0){
 			throw new CommandException("&cあなたは既に同じ建築物IDの看板を設定しています！");
 		}
