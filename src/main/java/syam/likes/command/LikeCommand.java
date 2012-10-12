@@ -11,6 +11,12 @@ import syam.likes.exception.CommandException;
  * @author syam(syamn)
  */
 public class LikeCommand extends BaseCommand{
+	public LikeCommand(){
+		bePlayer = false;
+		name = "like";
+		argLength = 0;
+		usage = "<- Like It!";
+	}
 
 	@Override
 	public void execute() throws CommandException {

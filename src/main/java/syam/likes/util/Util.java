@@ -4,7 +4,9 @@
  */
 package syam.likes.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 /**
@@ -75,5 +77,23 @@ public class Util{
 	        return fileName.substring(point + 1);
 	    }
 	    return fileName;
+	}
+
+	/**
+	 * Unix秒を yy/MM/dd HH:mm:ss フォーマットにして返す
+	 * @param unixSec Unix秒
+	 * @return yy/MM/dd HH:mm:ss
+	 */
+	public static String getDispTimeByUnixTime(long unixSec){
+		SimpleDateFormat sdf = new SimpleDateFormat("yy/MM/dd HH:mm:ss");
+		return sdf.format(new Date(unixSec * 1000));
+	}
+
+	/**
+	 * 現在のUnix秒を取得する
+	 * @return long unixSec
+	 */
+	public static long getCurrentUnixSec(){
+		return System.currentTimeMillis() / 1000;
 	}
 }

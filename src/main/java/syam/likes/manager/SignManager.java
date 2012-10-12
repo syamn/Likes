@@ -20,6 +20,7 @@ import syam.likes.database.Database;
 import syam.likes.exception.LikesPluginException;
 import syam.likes.player.PlayerProfile;
 import syam.likes.sign.LikeSign;
+import syam.likes.util.Util;
 
 /**
  * SignManager (SignManager.java)
@@ -59,6 +60,9 @@ public class SignManager {
 	public static boolean isLikesSign(Location loc){
 		return signs.containsKey(loc);
 	}
+	public static LikeSign getLikeSign(Location loc){
+		return signs.get(loc);
+	}
 
 	/*********/
 	/**
@@ -69,15 +73,14 @@ public class SignManager {
 	 * @param description
 	 * @return
 	 */
-	public static boolean createSign(final Sign sign, final Player creator, final String sign_name, final String description){
+ 	public static boolean createSign(final Sign sign, final Player creator, final String sign_name, final String description){
 		if (sign == null || sign.getBlock() == null || creator == null || sign_name == null){
 			return false;
 		}
 
 		final Location loc = sign.getBlock().getLocation();
-		final Long timestamp = System.currentTimeMillis() / 1000;
 
-		LikeSign ls = new LikeSign(0, sign_name, creator.getName(), 0, description, 0, 0, timestamp, loc);
+		LikeSign ls = new LikeSign(0, sign_name, creator.getName(), 0, description, 0, 0, Util.getCurrentUnixSec(), loc);
 		ls.updateDB(true); // INSERT
 
 		// Add

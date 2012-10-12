@@ -6,10 +6,12 @@ package syam.likes.sign;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
@@ -17,6 +19,8 @@ import syam.likes.database.Database;
 import syam.likes.exception.InvalidSignException;
 import syam.likes.exception.LikesPluginException;
 import syam.likes.player.PlayerProfile;
+import syam.likes.util.Actions;
+import syam.likes.util.Util;
 
 /**
  * LikeSign (LikeSign.java)
@@ -107,12 +111,26 @@ public class LikeSign {
 		updateDB(false);
 	}
 
+	public List<String> getInformation(){
+		List<String> ret = new ArrayList<String>();
+
+		ret.add("&b建築物ID:&6 " + getUniqueID() + " &b建築者:&6 " + creator);
+		ret.add("&b設置日:&6 " + Util.getDispTimeByUnixTime(this.created));
+		ret.add("&b建築物紹介:&6 " + ((this.text == null || this.text.length() == 0) ? "&7(なし)" : this.text));
+		ret.add("&bお気に入り登録ユーザー数:&6 " + this.liked);
+
+		return ret;
+	}
+
 	/* getter/setter */
 	public int getSignID(){
 		return this.signID;
 	}
 	public Location getLocation(){
 		return this.loc;
+	}
+	public String getUniqueID(){
+		return creator + "." + this.sign_name;
 	}
 
 	public String getName(){

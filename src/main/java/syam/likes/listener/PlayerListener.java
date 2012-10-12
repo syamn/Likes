@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import syam.likes.LikesPlugin;
 import syam.likes.manager.PlayerManager;
 import syam.likes.manager.SetupManager;
+import syam.likes.manager.SignManager;
 import syam.likes.util.Actions;
 import syam.likes.util.Util;
 
@@ -62,6 +63,11 @@ public class PlayerListener implements Listener {
 				Player player = event.getPlayer();
 				SetupManager.setSelectedSign(player, sign);
 				Actions.message(player, msgPrefix+ "&aこの看板を選択しました！");
+				if (SignManager.isLikesSign(sign.getLocation())){
+					for (String line : SignManager.getLikeSign(sign.getLocation()).getInformation()){
+						Actions.message(player, line);
+					}
+				}
 				event.setCancelled(true);
 			}
 		}
