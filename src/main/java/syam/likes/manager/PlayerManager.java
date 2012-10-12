@@ -65,10 +65,13 @@ public class PlayerManager {
 	/**
 	 * 全プレイヤーデータを保存する
 	 */
-	public static void saveAll(){
+	public static int saveAll(){
+		int i = 0;
 		for (LPlayer fgPlayer : players.values()){
 			fgPlayer.getProfile().save();
+			i++;
 		}
+		return i;
 	}
 
 	/**

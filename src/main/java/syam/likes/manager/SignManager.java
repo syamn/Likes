@@ -71,6 +71,15 @@ public class SignManager {
 		return signs.get(loc);
 	}
 
+	public static int saveAll(){
+		int i = 0;
+		for (LikeSign ls : signs.values()){
+			ls.save();
+			i++;
+		}
+		return i;
+	}
+
 	/*********/
 	/**
 	 * 新規評価看板をDBに登録する

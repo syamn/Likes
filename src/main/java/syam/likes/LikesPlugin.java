@@ -131,6 +131,12 @@ public class LikesPlugin extends JavaPlugin{
 	 */
 	@Override
 	public void onDisable(){
+		int i = PlayerManager.saveAll();
+		log.info(logPrefix + i + " player(s) saved!");
+
+		i = SignManager.saveAll();
+		log.info(logPrefix + i + " sign(s) saved!");
+
 		// メッセージ表示
 		PluginDescriptionFile pdfFile=this.getDescription();
 		log.info("["+pdfFile.getName()+"] version "+pdfFile.getVersion()+" is disabled!");

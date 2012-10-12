@@ -9,7 +9,8 @@
 UseVault: false
 # Costs
 Cost:
-  Action: 100
+  Like: 500
+  Create: 1000
 
 #==================#
 #   MySQL Config   #

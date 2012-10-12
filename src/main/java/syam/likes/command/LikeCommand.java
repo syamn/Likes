@@ -30,16 +30,17 @@ public class LikeCommand extends BaseCommand{
 
 	@Override
 	public void execute() throws CommandException {
+		// Check target sign
 		final Sign sign = Actions.getSign(SignManager.getSelectedSign(player));
 		if (sign == null || sign.getBlock() == null){
 			throw new CommandException("&c先に対象の看板を右クリックで選択してください！");
 		}
-
 		final LikeSign ls = SignManager.getLikeSign(sign.getLocation());
 		if (ls == null){
 			throw new CommandException("&cこの看板はまだ登録されていません！");
 		}
 
+		// Check comment
 		String comment = null;
 		if (args.size() > 0){
 			comment = Util.join(args, " ").trim();
@@ -48,19 +49,36 @@ public class LikeCommand extends BaseCommand{
 			}
 		}
 
+		// Check time
 		if (!PlayerManager.getPlayer(player.getName()).canDoLikeTime()){
 			throw new CommandException("&c6時間に1回だけお気に入りに登録することができます！");
 		}
 
+		// Check already
 		if (ls.isAlreadyLiked(player)){
 			throw new CommandException("&cあなたは既にこの看板をお気に入りにしています！");
 		}
 
+		// Pay cost
+		boolean paid = false;
+		double cost = plugin.getConfigs().getCost_Like();
+		if (plugin.getConfigs().getUseVault() && cost > 0 && !Perms.FREE_LIKE.has(player)){
+			paid = Actions.takeMoney(player.getName(), cost);
+			if (!paid){
+				throw new CommandException("&cお金が足りません！ " + Actions.getCurrencyString(cost) + "必要です！");
+			}
+		}
+
 		// do like!
 		if (ls.addLike(player, comment)){
-			Actions.message(player, "&aこの建築物をお気に入りに追加しました！");
-		}else{
+			String msg = "&aこの建築物をお気に入りに追加しました！";
+			if (paid) msg = msg + " &c(-" + Actions.getCurrencyString(cost) + ")";
+			Actions.message(player, msg);
+		}
+		// error
+		else{
 			Actions.message(player, "&c内部エラーが発生しました。管理人へご連絡ください。");
+			if (paid) Actions.addMoney(player.getName(), cost); // refund
 		}
 	}
 

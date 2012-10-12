@@ -17,13 +17,15 @@ public enum Perms {
 
 	/* コマンド系 */
 	// User Commands
-	CREATE ("user.create"),
 	LIKE ("user.like"),
+	CREATE ("user.create"),
 
 	// Admin Commands
 	RELOAD	("admin.reload"),
 
-	// Setup Commands
+	// Free Perms
+	FREE_LIKE ("free.like"),
+	FREE_CREATE ("free.create"),
 
 	// 特殊系
 	PLACESIGN ("user.placesign"),

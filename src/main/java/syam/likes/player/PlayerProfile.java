@@ -106,21 +106,25 @@ public class PlayerProfile {
 	/**
 	 * プレイヤーデータをMySQLデータベースに保存
 	 */
+	public void save(boolean force){
+		if (dirty || force){
+			Database database = LikesPlugin.getDatabases();
+			String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+			// データベースupdate
+
+			/* profilesテーブル */
+			database.write("UPDATE " + tablePrefix + "profiles SET " +
+					"`status` = " + this.status +
+					", `like_give` = " + this.like_give +
+					", `like_receive` = " + this.like_receive +
+					", `lastgivetime` = " + this.lastgivetime.intValue() +
+					" WHERE player_id = " + playerID);
+			dirty = false;
+		}
+	}
 	public void save(){
-		//Long timestamp = System.currentTimeMillis() / 1000;
-
-		Database database = LikesPlugin.getDatabases();
-		String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
-
-		// データベースupdate
-
-		/* profilesテーブル */
-		database.write("UPDATE " + tablePrefix + "profiles SET " +
-				"`status` = " + this.status +
-				", `like_give` = " + this.like_give +
-				", `like_receive` = " + this.like_receive +
-				", `lastgivetime` = " + this.lastgivetime.intValue() +
-				" WHERE player_id = " + playerID);
+		save(false);
 	}
 
 	/* getter / setter */

@@ -44,7 +44,7 @@ public class LikeSign {
 	private Long created;
 	private int status;
 
-	private boolean dirty = false;
+	private boolean dirty;
 
 	/**
 	 * コンストラクタ
@@ -64,6 +64,8 @@ public class LikeSign {
 		//this.created = (signID < 1) ? System.currentTimeMillis() / 1000 : created;
 		this.created = created;
 		this.loc = location;
+
+		dirty = false;
 	}
 
 	public void save(boolean force){
@@ -106,6 +108,7 @@ public class LikeSign {
 					throw new LikesPluginException("Could not insert to " + tablePrefix + "signs table properly!");
 				}
 			}
+			dirty = false;
 		}
 	}
 	public void save(){
