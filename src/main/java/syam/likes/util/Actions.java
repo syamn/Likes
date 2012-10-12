@@ -19,6 +19,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -300,6 +302,22 @@ public class Actions {
 				inv.remove(i);
 				player.getWorld().dropItemNaturally(loc, i);
 			}
+		}
+	}
+
+	/**
+	 * 座標からSignまたはnullに変換して返す
+	 * @param loc
+	 * @return
+	 */
+	public static Sign getSign(final Location loc){
+		if (loc == null) return null;
+		final Block block = loc.getBlock();
+		final int id = block.getTypeId();
+		if (id == Material.SIGN_POST.getId() || id == Material.WALL_SIGN.getId()){
+			return (Sign) block.getState();
+		}else{
+			return null;
 		}
 	}
 }

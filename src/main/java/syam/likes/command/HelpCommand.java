@@ -4,7 +4,6 @@
  */
 package syam.likes.command;
 
-import syam.likes.LikesPlugin;
 import syam.likes.util.Actions;
 
 /**

@@ -8,11 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
 
@@ -176,6 +171,10 @@ public class PlayerProfile {
 	}
 
 	// lastGiveTime
+	public void setLastGiveTime(long time){
+		this.lastgivetime = time;
+		this.dirty = true;
+	}
 	public void updateLastGiveTime(){
 		this.lastgivetime = System.currentTimeMillis() / 1000;
 		this.dirty = true;

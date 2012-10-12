@@ -15,7 +15,6 @@ import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
 import syam.likes.exception.CommandException;
 import syam.likes.manager.PlayerManager;
-import syam.likes.manager.SetupManager;
 import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
 import syam.likes.player.PlayerProfile;
@@ -36,7 +35,8 @@ public class CreateCommand extends BaseCommand{
 
 	@Override
 	public void execute() throws CommandException {
-		final Sign sign = SetupManager.getSelectedSign(player);
+		final Sign sign = Actions.getSign(SignManager.getSelectedSign(player));
+
 		if (sign == null || sign.getBlock() == null){
 			throw new CommandException("&c先に設定対象の看板を右クリックで選択してください！");
 		}

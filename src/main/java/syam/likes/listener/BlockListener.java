@@ -16,7 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
 
 import syam.likes.LikesPlugin;
-import syam.likes.manager.SetupManager;
+import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
 import syam.likes.util.Actions;
 
@@ -38,9 +38,9 @@ public class BlockListener implements Listener {
 	// 看板を設置した
 	@EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
 	public void onSignChange(final SignChangeEvent event){
-		Player player = event.getPlayer();
-		Block block = event.getBlock();
-		BlockState state = event.getBlock().getState();
+		final Player player = event.getPlayer();
+		final Block block = event.getBlock();
+		final BlockState state = event.getBlock().getState();
 
 		if (state instanceof Sign){
 			Sign sign = (Sign)state;
@@ -69,7 +69,7 @@ public class BlockListener implements Listener {
 					if (player.getName().length() > 15) { event.setLine(3, player.getName().substring(0, 13) + ".."); }
 					else { event.setLine(3, player.getName()); }
 
-					SetupManager.setSelectedSign(player, (Sign) event.getBlock().getState());
+					SignManager.setSelectedSign(player, block.getLocation());
 
 					Actions.message(player, "&aLikes看板を設置して選択しました！");
 				}

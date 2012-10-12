@@ -11,13 +11,14 @@ import java.util.logging.Logger;
 
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
-import syam.likes.exception.InvalidSignException;
+import syam.likes.exception.CommandException;
 import syam.likes.exception.LikesPluginException;
+import syam.likes.manager.PlayerManager;
+import syam.likes.player.LPlayer;
 import syam.likes.player.PlayerProfile;
 import syam.likes.util.Actions;
 import syam.likes.util.Util;
@@ -65,7 +66,7 @@ public class LikeSign {
 		this.loc = location;
 	}
 
-	public void updateDB(boolean force){
+	public void save(boolean force){
 		if (dirty || force){
 			// Get Creator ID
 			PlayerProfile prof = new PlayerProfile(creator, false);
@@ -107,8 +108,8 @@ public class LikeSign {
 			}
 		}
 	}
-	public void updateDB(){
-		updateDB(false);
+	public void save(){
+		save(false);
 	}
 
 	public List<String> getInformation(){
@@ -120,6 +121,97 @@ public class LikeSign {
 		ret.add("&bお気に入り登録ユーザー数:&6 " + this.liked);
 
 		return ret;
+	}
+
+	public void updateSign(){
+		Sign sign = Actions.getSign(this.loc);
+		if (sign == null){
+			log.warning(logPrefix+ "Could not update sign at " + Actions.getBlockLocationString(this.loc));
+			return;
+		}
+
+		sign.setLine(0, "§a[Likes]");
+		sign.setLine(1, String.valueOf(this.liked));
+		sign.setLine(2, this.sign_name);
+		sign.setLine(3, (this.creator.length() > 15) ? this.creator.substring(0, 13) + ".." : this.creator);
+
+		sign.update();
+	}
+
+	public boolean addLike(final Player player, String text){
+		if (player == null) throw new IllegalArgumentException("Player could not be null!");
+		if (this.signID <= 0) {
+			this.save(true);
+		}
+
+		// Get Profile
+		PlayerProfile prof = PlayerManager.getProfile(player.getName());
+		if (prof == null || !prof.isLoaded()){
+			throw new IllegalArgumentException("Player profile does not found!");
+		}
+		final int playerID = prof.getPlayerID();
+		final int timestamp = Util.getCurrentUnixSec().intValue();
+
+		// Like!
+		Database database = LikesPlugin.getDatabases();
+		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+		boolean result = database.write("INSERT INTO " + tablePrefix + "likes VALUES " +
+					"(null, " + playerID + ", " + this.signID + ", '" + text + "', " + timestamp + ")");
+
+		if (result){
+			// プロフィール更新
+			prof.addLikeGiveCount();
+			prof.setLastGiveTime(timestamp);
+
+			// 看板データ更新
+			this.addLiked();
+			this.updateSign();
+
+			// 所有者プロフィール更新
+			LPlayer cLPlayer = PlayerManager.getPlayer(this.creator);
+			PlayerProfile cProf = (cLPlayer != null) ? cLPlayer.getProfile() : new PlayerProfile(this.creator, false);
+			if (cProf == null || !cProf.isLoaded()){
+				throw new LikesPluginException("Creator profile does not exist! Creator=" + this.creator);
+			}
+			cProf.addLikeReceiveCount();
+
+			// Save
+			prof.save();
+			cProf.save();
+			this.save();
+
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public boolean isAlreadyLiked(final Player player){
+		if (player == null) throw new IllegalArgumentException("Player could not be null!");
+
+		if (this.signID <= 0){
+			this.save(true);
+		}
+
+		// Get Profile
+		PlayerProfile prof = PlayerManager.getProfile(player.getName());
+		if (prof == null || !prof.isLoaded()){
+			throw new IllegalArgumentException("Player profile does not found!");
+		}
+		final int playerID = prof.getPlayerID();
+
+		// Get DataBase
+		Database database = LikesPlugin.getDatabases();
+		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
+
+		// Get Result
+		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `like_id` FROM " + tablePrefix + "likes WHERE `player_id` = " + playerID + " AND `sign_id` = " + this.signID);
+		if (result.size() > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/* getter/setter */
@@ -154,6 +246,11 @@ public class LikeSign {
 	}
 	public void setLiked(int liked){
 		this.liked = liked;
+		this.dirty = true;
+	}
+	public void addLiked(){
+		this.liked = this.liked + 1;
+		this.dirty = true;
 	}
 
 	public int getStatus(){

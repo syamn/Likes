@@ -93,7 +93,15 @@ public class Util{
 	 * 現在のUnix秒を取得する
 	 * @return long unixSec
 	 */
-	public static long getCurrentUnixSec(){
+	public static Long getCurrentUnixSec(){
 		return System.currentTimeMillis() / 1000;
+	}
+
+	/**
+	 * Unix秒からDateを取得して返す
+	 * @return Date
+	 */
+	public static Date getDateByUnixTime(long unixSec){
+		return new Date(unixSec * 1000);
 	}
 }

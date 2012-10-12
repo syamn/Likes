@@ -6,7 +6,6 @@ package syam.likes.listener;
 
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -21,10 +20,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import syam.likes.LikesPlugin;
 import syam.likes.manager.PlayerManager;
-import syam.likes.manager.SetupManager;
 import syam.likes.manager.SignManager;
 import syam.likes.util.Actions;
-import syam.likes.util.Util;
 
 /**
  * PlayerListener (PlayerListener.java)
@@ -61,7 +58,7 @@ public class PlayerListener implements Listener {
 			Sign sign = (Sign) block.getState();
 			if (sign.getLine(0).equals("§a[Likes]")){
 				Player player = event.getPlayer();
-				SetupManager.setSelectedSign(player, sign);
+				SignManager.setSelectedSign(player, block.getLocation());
 				Actions.message(player, msgPrefix+ "&aこの看板を選択しました！");
 				if (SignManager.isLikesSign(sign.getLocation())){
 					for (String line : SignManager.getLikeSign(sign.getLocation()).getInformation()){

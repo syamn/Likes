@@ -4,11 +4,13 @@
  */
 package syam.likes.player;
 
+import java.util.Calendar;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
+import syam.likes.util.Util;
 
 /**
  * LPlayer (LPlayer.java)
@@ -27,6 +29,22 @@ public class LPlayer {
 	public LPlayer(final Player player){
 		this.player = player;
 		this.profile = new PlayerProfile(player.getName(), true);
+	}
+
+	public boolean canDoLikeTime(){
+		if (profile.getlastGiveTime() <= 0){
+			return true;
+		}
+
+		Calendar lastGive = Calendar.getInstance();
+		lastGive.setTime(Util.getDateByUnixTime(profile.getlastGiveTime()));
+		lastGive.add(Calendar.HOUR, 6); // 6時間に1回まで
+
+		if (lastGive.after(Calendar.getInstance())){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	/* getter / setter */

@@ -17,8 +17,6 @@ import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
-import syam.likes.exception.LikesPluginException;
-import syam.likes.player.PlayerProfile;
 import syam.likes.sign.LikeSign;
 import syam.likes.util.Util;
 
@@ -52,6 +50,15 @@ public class SignManager {
 		return signsSimply.get(signID);
 	}
 	*/
+	// 選択中の看板
+	private static Map<String, Location> selectedSign = new HashMap<String, Location>();
+
+	public static void setSelectedSign(Player player, Location loc){
+		selectedSign.put(player.getName(), loc);
+	}
+	public static Location getSelectedSign(Player player){
+		return (player == null) ? null : selectedSign.get(player.getName());
+	}
 
 	@Deprecated
 	private static HashMap<Location, Integer> signsSimply = new HashMap<Location, Integer>();
@@ -81,7 +88,7 @@ public class SignManager {
 		final Location loc = sign.getBlock().getLocation();
 
 		LikeSign ls = new LikeSign(0, sign_name, creator.getName(), 0, description, 0, 0, Util.getCurrentUnixSec(), loc);
-		ls.updateDB(true); // INSERT
+		ls.save(true); // INSERT
 
 		// Add
 		signs.put(loc, ls);
