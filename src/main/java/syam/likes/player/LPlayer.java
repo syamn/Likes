@@ -40,7 +40,7 @@ public class LPlayer {
 		lastGive.setTime(Util.getDateByUnixTime(profile.getlastGiveTime()));
 		lastGive.add(Calendar.HOUR, 6); // 6時間に1回まで
 
-		if (lastGive.after(Calendar.getInstance())){
+		if (lastGive.before(Calendar.getInstance())){
 			return true;
 		}else{
 			return false;
