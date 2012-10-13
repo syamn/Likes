@@ -20,6 +20,8 @@ public enum Perms {
 	LIKE ("user.like"),
 	CREATE ("user.create"),
 	DELETE ("user.delete"),
+	STATS_SELF ("user.stats.self"),
+	STATS_OTHER ("user.stats.other"),
 
 	// Admin Commands
 	RELOAD	("admin.reload"),

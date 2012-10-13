@@ -28,6 +28,7 @@ import syam.likes.command.DeleteCommand;
 import syam.likes.command.HelpCommand;
 import syam.likes.command.LikeCommand;
 import syam.likes.command.ReloadCommand;
+import syam.likes.command.StatsCommand;
 import syam.likes.command.queue.ConfirmQueue;
 import syam.likes.database.Database;
 import syam.likes.listener.BlockListener;
@@ -157,6 +158,7 @@ public class LikesPlugin extends JavaPlugin{
 
 		// General Commands
 		commands.add(new LikeCommand());
+		commands.add(new StatsCommand());
 		commands.add(new CreateCommand());
 		commands.add(new DeleteCommand());
 

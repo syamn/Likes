@@ -86,7 +86,7 @@ public class SignProtectListener implements Listener{
 		}
 	}
 
-	//@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
 	public void onBlockPhysics(final BlockPhysicsEvent event){
 		Block block = event.getBlock();
 		if (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST){

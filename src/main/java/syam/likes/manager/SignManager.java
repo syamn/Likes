@@ -6,6 +6,8 @@ package syam.likes.manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -35,24 +37,8 @@ public class SignManager {
 		this.plugin = plugin;
 	}
 
-	/*
-	private static HashMap<Integer, LikeSign> signsSimply = new HashMap<Integer, LikeSign>();
-	public static HashMap<Integer, LikeSign> getSigns(){
-		return signsSimply;
-	}
-	public static void addSign(Integer signID, LikeSign sign){
-		signsSimply.put(signID, sign);
-	}
-	public static void removeSign(Integer signID){
-		signsSimply.remove(signID);
-	}
-	public static LikeSign getSign(Integer signID){
-		return signsSimply.get(signID);
-	}
-	*/
 	// 選択中の看板
 	private static Map<String, Location> selectedSign = new HashMap<String, Location>();
-
 	public static void setSelectedSign(Player player, Location loc){
 		selectedSign.put(player.getName(), loc);
 	}
@@ -60,10 +46,8 @@ public class SignManager {
 		return (player == null) ? null : selectedSign.get(player.getName());
 	}
 
-	@Deprecated
-	private static HashMap<Location, Integer> signsSimply = new HashMap<Location, Integer>();
+	// 評価看板
 	private static HashMap<Location, LikeSign> signs = new HashMap<Location, LikeSign>();
-
 	public static boolean isLikesSign(Location loc){
 		return signs.containsKey(loc);
 	}
@@ -83,7 +67,66 @@ public class SignManager {
 		return i;
 	}
 
-	/*********/
+	/* ******* */
+	/**
+	 * 建築者の評価看板リストを返す
+	 * @param creator
+	 * @return List<LikeSign>
+	 */
+	public static List<LikeSign> getLikeSignsByCreator(String creator){
+		List<LikeSign> ret = new ArrayList<LikeSign>();
+
+		for (LikeSign ls : signs.values()){
+			if (ls.getCreator().equalsIgnoreCase(creator)){
+				ret.add(ls);
+			}
+		}
+
+		return ret;
+	}
+	/**
+	 * 看板IDから評価看板を返す
+	 * @param signID
+	 * @return LikeSign or null
+	 */
+	public static LikeSign getLikeSignBySignID(int signID){
+		for (LikeSign ls : signs.values()){
+			if (ls.getSignID() == signID){
+				return ls;
+			}
+		}
+		return null; // not found
+	}
+	/**
+	 * 建築者名と看板名から評価看板を返す
+	 * @param creator
+	 * @param signName
+	 * @return LikeSign or null
+	 */
+	public static LikeSign getLikeSignByCreatorAndName(String creator, String signName){
+		for (LikeSign ls : signs.values()){
+			if (ls.getCreator().equalsIgnoreCase(creator) &&
+					ls.getName().equalsIgnoreCase(signName)){
+				return ls;
+			}
+		}
+		return null;
+	}
+	/**
+	 * 看板のユニーク名から評価看板を返す
+	 * @param unique
+	 * @return LikeSign or null
+	 */
+	public static LikeSign getLikeSignByUniqueName(String unique){
+		String[] s = unique.split(".");
+		if (s.length != 2){
+			return null;
+		}
+		return getLikeSignByCreatorAndName(s[0], s[1]);
+	}
+
+
+	/* ******* */
 	/**
 	 * 新規評価看板をDBに登録する
 	 * @param sign
@@ -149,41 +192,10 @@ public class SignManager {
 					loc
 					);
 
+			ls.updateSign();
 			// Add HashMap
 			signs.put(loc, ls);
 		}
 		return signs.size();
-	}
-
-	/**
-	 * データベースから看板データをマッピングする
-	 */
-	@Deprecated
-	public static int loadSignsSimply(){
-		signsSimply.clear();
-		World world = null;
-
-		Database database = LikesPlugin.getDatabases();
-		final String tablePrefix = LikesPlugin.getInstance().getConfigs().getMySQLtablePrefix();
-
-		HashMap<Integer, ArrayList<String>> result = database.read("SELECT `sign_id`, `world`, `x`, `y`, `z` FROM " + tablePrefix + "signsSimply");
-		for (ArrayList<String> record : result.values()){
-			world = Bukkit.getWorld(record.get(1));
-			if (world == null){
-				log.warning(logPrefix+ "Skipping SignID " + record.get(0) + ":not exist world " + record.get(1));
-				continue;
-			}
-			signsSimply.put(
-					new Location(
-							world,
-							Double.parseDouble(record.get(2)),
-							Double.parseDouble(record.get(3)),
-							Double.parseDouble(record.get(4))
-							),
-					Integer.parseInt(record.get(0))
-					);
-		}
-
-		return signsSimply.size();
 	}
 }
