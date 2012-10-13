@@ -10,10 +10,13 @@ import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
+import syam.likes.events.LikedEvent;
 import syam.likes.exception.CommandException;
 import syam.likes.manager.PlayerManager;
 import syam.likes.manager.SignManager;
 import syam.likes.permission.Perms;
+import syam.likes.player.LPlayer;
+import syam.likes.player.PlayerProfile;
 import syam.likes.sign.LikeSign;
 import syam.likes.util.Actions;
 import syam.likes.util.Util;
@@ -84,13 +87,32 @@ public class LikeCommand extends BaseCommand{
 			if (paid) msg = msg + " &c(-" + Actions.getCurrencyString(cost) + ")";
 			Actions.message(player, msg);
 
-			Player creator = Bukkit.getPlayer(ls.getCreator());
+			String creatorName = ls.getCreator();
+			Player creator = Bukkit.getPlayer(creatorName);
 			if (creator != null && creator.isOnline()){
 				Actions.message(creator, "&aプレイヤー'&6"+player.getName()+"&a'があなたの建築物'&6"+ls.getName()+"&a'をお気に入りに登録しました！");
 				if (comment != null && comment.length() > 0){
 					Actions.message(creator, "&aコメント: &6");
 				}
 			}
+
+			PlayerProfile prof = null;
+			// 対象者がログイン中かどうか
+			if (PlayerManager.getPlayer(creatorName) != null){
+				prof = PlayerManager.getPlayer(creatorName).getProfile();
+			}
+			// オフライン
+			else{
+				prof = new PlayerProfile(args.get(0), false);
+
+				if (!prof.isLoaded()){
+					throw new CommandException("&c指定したプレイヤーの情報が見つかりません");
+				}
+			}
+
+			// Call Event
+			LikedEvent likedEvent = new LikedEvent(player, ls.getCreator(), ls, prof.getLikeReceiveCount(), comment);
+			plugin.getServer().getPluginManager().callEvent(likedEvent);
 		}
 		// error
 		else{
