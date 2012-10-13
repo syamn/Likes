@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import syam.likes.LikesPlugin;
 import syam.likes.database.Database;
+import syam.likes.events.LikeEvent;
 import syam.likes.events.LikedEvent;
 import syam.likes.exception.CommandException;
 import syam.likes.manager.PlayerManager;
@@ -71,9 +72,19 @@ public class LikeCommand extends BaseCommand{
 			throw new CommandException("&cあなたは既にこの看板をお気に入りにしています！");
 		}
 
-		// Pay cost
 		boolean paid = false;
 		double cost = plugin.getConfigs().getCost_Like();
+
+		// Call Event
+		LikeEvent likeEvent = new LikeEvent(player, ls, cost, comment);
+		plugin.getServer().getPluginManager().callEvent(likeEvent);
+		if (likeEvent.isCancelled()){
+			return;
+		}
+		cost = likeEvent.getCost();
+		comment = likeEvent.getComment();
+
+		// Pay cost
 		if (plugin.getConfigs().getUseVault() && cost > 0 && !Perms.FREE_LIKE.has(player)){
 			paid = Actions.takeMoney(player.getName(), cost);
 			if (!paid){
