@@ -42,6 +42,7 @@ public class ConfigurationManager {
 
 	// 設定項目
 	/* Basic Configs */
+	private int minutesPerLike = 360;
 
 	/* Vault Config */
 	private boolean useVault = false;
@@ -91,6 +92,7 @@ public class ConfigurationManager {
 		checkver(version);
 
 		/* Basic Configs */
+		minutesPerLike = plugin.getConfig().getInt("MinutesPerLike", 360);
 
 		/* Vault Configs */
 		useVault = plugin.getConfig().getBoolean("UseVault", false);
@@ -123,6 +125,9 @@ public class ConfigurationManager {
 
 	// 設定 getter ここから
 	/* Basic Configs */
+	public int getMinutesPerLike(){
+		return this.minutesPerLike;
+	}
 
 	/* Vault Config */
 	public boolean getUseVault(){

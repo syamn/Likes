@@ -38,7 +38,7 @@ public class LPlayer {
 
 		Calendar lastGive = Calendar.getInstance();
 		lastGive.setTime(Util.getDateByUnixTime(profile.getlastGiveTime()));
-		lastGive.add(Calendar.HOUR, 6); // 6時間に1回まで
+		lastGive.add(Calendar.MINUTE, LikesPlugin.getInstance().getConfigs().getMinutesPerLike()); // n分に1回まで
 
 		if (lastGive.before(Calendar.getInstance())){
 			return true;

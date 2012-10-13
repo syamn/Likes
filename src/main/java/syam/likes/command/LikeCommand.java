@@ -57,8 +57,10 @@ public class LikeCommand extends BaseCommand{
 		}
 
 		// Check time
-		if (!PlayerManager.getPlayer(player.getName()).canDoLikeTime()){
-			throw new CommandException("&c6時間に1回だけお気に入りに登録することができます！");
+		if (plugin.getConfigs().getMinutesPerLike() > 0){
+			if (!PlayerManager.getPlayer(player.getName()).canDoLikeTime()){
+				throw new CommandException("&c" + Util.getReadableTimeByMinute(plugin.getConfigs().getMinutesPerLike()) + "に1回だけお気に入りに登録することができます！");
+			}
 		}
 
 		// Check already

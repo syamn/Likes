@@ -104,4 +104,19 @@ public class Util{
 	public static Date getDateByUnixTime(long unixSec){
 		return new Date(unixSec * 1000);
 	}
+
+	/**
+	 * 分を読みやすい時間表記にして返す
+	 * @param min
+	 * @return
+	 */
+	public static String getReadableTimeByMinute(int min){
+		if (min < 0) return "0分間";
+		if (min < 60) return min + "分間";
+		if (min % 60 == 0) return min / 60 + "時間";
+
+		int h = min / 60;
+		int m = min % 60;
+		return h + "時間" + m + "分";
+	}
 }

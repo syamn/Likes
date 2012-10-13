@@ -3,6 +3,11 @@
 # github: https://github.com/syamn/Likes
 
 #==================#
+#   Basic Config   #
+#==================#
+MinutesPerLike: 360
+
+#==================#
 #   Vault Config   #
 #==================#
 # Hook to Vault for economy integration
